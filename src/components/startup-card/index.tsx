@@ -4,36 +4,48 @@ import {
   CardTopWrapper,
   CardMiddleWrapper,
   CardBottomGroup,
+  AvatarImage,
+  ImageWrapper,
 } from './components'
-import { MyButton } from '../global'
+import { StartupDataInterface } from '../../interfaces/global'
+import ModeCommentRoundedIcon from '@material-ui/icons/ModeCommentRounded'
+import ThumbUpRoundedIcon from '@material-ui/icons/ThumbUpRounded'
+import AccountCircleRoundedIcon from '@material-ui/icons/AccountCircleRounded'
 
-const StartupCard: React.FC = (): React.ReactElement => {
+export interface StartupInterface {
+  key: number
+  startup: StartupDataInterface
+}
+
+const StartupCard: React.FC<StartupInterface> = (
+  props: StartupInterface
+): React.ReactElement => {
   return (
     <CardWrapper>
+      <div>
+        <ImageWrapper src={props.startup.logo} />
+      </div>
       <CardTopWrapper>
+        <AvatarImage src={props.startup.logo} alt="logo" />
         <div>
-          <h1>FT</h1>
-        </div>
-        <div>
-          <div>Felt teachers</div>
-          <div>Education tech</div>
+          <div>{props.startup.name}</div>
+          <div>{props.startup.industry}</div>
         </div>
       </CardTopWrapper>
       <CardMiddleWrapper>
-        An ed tech platform Lorem ipsum, dolor sit amet consectetur adipisicing
-        elit.
+        {props.startup['short-description']}
       </CardMiddleWrapper>
       <CardBottomWrapper>
         <CardBottomGroup>
-          <MyButton>C</MyButton>
-          <div>12</div>
+          <ModeCommentRoundedIcon />
+          <div>{props.startup.comments.length}</div>
         </CardBottomGroup>
         <CardBottomGroup>
-          <MyButton>+</MyButton>
-          <div>78</div>
+          <ThumbUpRoundedIcon />
+          <div>{props.startup.rating}</div>
         </CardBottomGroup>
         <div>
-          <MyButton>Action</MyButton>
+          <AccountCircleRoundedIcon />
         </div>
       </CardBottomWrapper>
     </CardWrapper>

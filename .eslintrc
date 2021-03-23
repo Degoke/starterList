@@ -19,6 +19,7 @@
           "endOfLine": "auto"
         }
       ],
+      "react/prop-types": "off",
       "no-unused-vars": "off",
       "no-undef": "off",
       "no-console": "warn",

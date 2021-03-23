@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react'
 
 export default interface RouteInterface {
-    path: string
-    name: string
-    component: React.FC
+  path: string
+  name: string
+  component: React.FC
 }
