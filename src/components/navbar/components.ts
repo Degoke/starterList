@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { MyList, MyButton, MyInput } from '../global'
+import { MyList, MyInput } from '../global'
 
 export const NavWrapper = styled.nav`
   display: flex;
@@ -21,9 +21,7 @@ export const RightNavWrapper = styled.ul`
 export const NavList = styled(MyList)`
   margin: auto 0.5rem;
 `
-export const TagButton = styled(MyButton)`
-  background-color: ${(props) => props.theme.color.background};
-`
+
 export const NavSearchBox = styled(MyInput)`
   background-color: ${(props) => props.theme.color.primary};
   border-top: none;
@@ -34,7 +32,4 @@ export const TagWrapper = styled.div`
   margin: 1rem auto;
   display: flex;
   justify-content: flex-end;
-`
-export const NavButton = styled(MyButton)`
-  background-color: ${(props) => props.theme.color.primary};
 `

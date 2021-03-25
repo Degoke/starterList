@@ -4,13 +4,13 @@ import {
   CardTopWrapper,
   CardMiddleWrapper,
   CardBottomGroup,
-  AvatarImage,
   ImageWrapper,
 } from './components'
 import { StartupDataInterface } from '../../interfaces/global'
 import ModeCommentRoundedIcon from '@material-ui/icons/ModeCommentRounded'
 import ThumbUpRoundedIcon from '@material-ui/icons/ThumbUpRounded'
 import AccountCircleRoundedIcon from '@material-ui/icons/AccountCircleRounded'
+import { MyIconButton } from '../global'
 
 export interface StartupInterface {
   key: number
@@ -23,29 +23,34 @@ const StartupCard: React.FC<StartupInterface> = (
   return (
     <CardWrapper>
       <div>
-        <ImageWrapper src={props.startup.logo} />
+        <ImageWrapper src={props.startup.images} />
       </div>
       <CardTopWrapper>
-        <AvatarImage src={props.startup.logo} alt="logo" />
         <div>
           <div>{props.startup.name}</div>
           <div>{props.startup.industry}</div>
         </div>
       </CardTopWrapper>
       <CardMiddleWrapper>
-        {props.startup['short-description']}
+        {props.startup.shortDescription}
       </CardMiddleWrapper>
       <CardBottomWrapper>
         <CardBottomGroup>
-          <ModeCommentRoundedIcon />
-          <div>{props.startup.comments.length}</div>
+          <MyIconButton>
+            <ModeCommentRoundedIcon />
+            <div>{props.startup.comments.length}</div>
+          </MyIconButton>
         </CardBottomGroup>
         <CardBottomGroup>
-          <ThumbUpRoundedIcon />
-          <div>{props.startup.rating}</div>
+          <MyIconButton>
+            <ThumbUpRoundedIcon />
+            <div>{props.startup.ratings}</div>
+          </MyIconButton>
         </CardBottomGroup>
         <div>
-          <AccountCircleRoundedIcon />
+          <MyIconButton>
+            <AccountCircleRoundedIcon fontSize="large" />
+          </MyIconButton>
         </div>
       </CardBottomWrapper>
     </CardWrapper>

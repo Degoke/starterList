@@ -4,18 +4,56 @@ export const MyList = styled.li`
   list-style: none;
 `
 export const MyButton = styled.button`
-  padding: 1rem;
+  padding: 0.5rem;
   border: none;
   border-radius: 5px;
   color: ${(props) => props.theme.color.text};
-  background-color: ${(props) => props.theme.color.background};
+  background-color: inherit;
+  font-size: inherit;
   &:hover {
     cursor: pointer;
     background-color: ${(props) => props.theme.color.secondary};
-    color: ${(props) => props.theme.color.primary};
   }
 `
 export const MyInput = styled.input`
-  padding: 1rem 0.5rem;
+  padding: 0.5rem;
   color: ${(props) => props.theme.color.text};
+  border: none;
+  background-color: ${(props) => props.theme.color.secondary};
+  font-size: inherit;
+  &:focus {
+    border-color: ${(props) => props.theme.color.secondary};
+  }
+`
+
+export const MyIconButton = styled.button`
+  padding: none;
+  border: none;
+  color: ${(props) => props.theme.color.text};
+  background-color: inherit;
+  &:hover {
+    cursor: pointer;
+    color: #ffffff;
+  }
+`
+export const MyTextField = styled.textarea`
+  padding: 0.5rem;
+  color: ${(props) => props.theme.color.text};
+  border: none;
+  background-color: ${(props) => props.theme.color.secondary};
+  font-size: inherit;
+  resize: none;
+  &:focus {
+    border-color: ${(props) => props.theme.color.secondary};
+  }
+`
+export const MySelect = styled.select`
+  padding: 0.5rem;
+  color: ${(props) => props.theme.color.text};
+  border: none;
+  background-color: ${(props) => props.theme.color.secondary};
+  font-size: inherit;
+  &:focus {
+    border-color: ${(props) => props.theme.color.secondary};
+  }
 `

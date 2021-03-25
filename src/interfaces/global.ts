@@ -1,21 +1,34 @@
+export type FundRaisingRoundsType =
+  | 'pre-seed'
+  | 'seed'
+  | 'Series A'
+  | 'Series B'
+  | 'Series C'
+  | 'None'
+
 export interface StartupDataInterface {
   id: {
     $oid: string
   }
   name: string
-  'short-description': string
+  shortDescription: string
   industry: string
   location: string
-  website: string
   logo: string
+  website: string
   images: string
-  comments: string
-  rating: number
-  'founding-date': string
-  'fundraising-round': string
-  'existing-investors': string
-  'total-funding': number
-  'user-metrics': number
-  owner: { $oid: string }
-  'owner-image': string
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  comments: {}[]
+  ratings: number
+  dateFounded: string
+  fundRaisingRound: FundRaisingRoundsType
+  existingInvestors: string | string[]
+  longDescription: string
+  totalFunding: string
+  userMetrics: number
+  owner: {
+    $oid: string
+  }
+  ownerImage: string
+  dateAdded: string
 }

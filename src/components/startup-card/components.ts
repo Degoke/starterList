@@ -16,13 +16,11 @@ export const CardTopWrapper = styled.div`
 `
 export const CardBottomWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 1rem;
-  justify-self: flex-end;
+  padding: 0.5rem 1rem;
 `
 export const CardMiddleWrapper = styled.div`
-  padding: 1rem;
+  padding: 0.2rem 1rem;
   height: 100%;
   text-align: center;
 `
@@ -37,6 +35,8 @@ export const AvatarImage = styled.img`
   border-radius: 50%;
 `
 export const ImageWrapper = styled.img`
-  width: 18rem;
+  width: 100%;
   height: 10rem;
+  border-bottom-left-radius: 10%;
+  border-bottom-right-radius: 10%;
 `

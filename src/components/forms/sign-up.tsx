@@ -10,7 +10,7 @@ import { MyInput } from '../global'
 import { forwardRef, useRef } from 'react'
 import { useCombinedRefs } from '../../utils/global/functions'
 
-const SignIn = forwardRef(
+const SignUp = forwardRef(
   (props, ref: React.Ref<HTMLDivElement>): React.ReactElement => {
     const innerRef = useRef(null)
     const combinedRef = useCombinedRefs(ref, innerRef)
@@ -43,6 +43,6 @@ const SignIn = forwardRef(
   }
 )
 
-SignIn.displayName = 'SignIn'
+SignUp.displayName = 'SignUp'
 
-export default SignIn
+export default SignUp

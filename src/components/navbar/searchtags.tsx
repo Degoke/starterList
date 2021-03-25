@@ -1,6 +1,7 @@
-import { RightNavWrapper, NavList, TagButton, TagWrapper } from './components'
+import { RightNavWrapper, NavList, TagWrapper } from './components'
 import { useContext } from 'react'
 import { MainContext } from '../../utils/global/context'
+import { MyButton } from '../global'
 
 const tags: string[] = ['All', 'tech', 'games', 'books', 'tools', 'wearables']
 
@@ -19,9 +20,9 @@ const SearchTags: React.FC = (): React.ReactElement => {
         {tags.map((tag, index) => {
           return (
             <NavList key={index}>
-              <TagButton id={tag} onClick={filterTag}>
+              <MyButton id={tag} onClick={filterTag}>
                 {tag.toUpperCase()}
-              </TagButton>
+              </MyButton>
             </NavList>
           )
         })}

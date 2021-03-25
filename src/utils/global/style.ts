@@ -2,10 +2,10 @@ import { DefaultTheme, createGlobalStyle } from 'styled-components'
 
 export const myTheme: DefaultTheme = {
   color: {
-    primary: '#FFFFFF',
-    text: 'hsl(180, 8%, 52%)',
-    secondary: 'hsl(180, 29%, 50%)',
-    background: '#EEEEEE',
+    primary: '#333333',
+    text: '#EEEEEE',
+    secondary: '#424242',
+    background: '#212121',
   },
   font: {
     big: '15px',
