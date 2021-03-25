@@ -2,13 +2,14 @@ import styled from 'styled-components'
 
 export const DetailsWrapper = styled.section`
   width: 80%;
-  margin: auto;
+  margin: 5% auto;
   text-align: center;
 `
 export const DetailsContainer = styled.div`
   display: grid;
   grid-template-columns: 3fr 1fr;
   grid-column-gap: 2rem;
+  margin-top: 5%;
 `
 export const DiscussionsWrapper = styled.aside`
   padding: 1rem;
@@ -22,4 +23,13 @@ export const CommentBox = styled.div`
   border: 1px solid ${(props) => props.theme.color.secondary};
   padding: 1rem 0.5rem;
   margin: 1rem 0;
+`
+
+export const RowGroup = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
+export const ColumnGroup = styled.div`
+  display: flex;
+  flex-direction: column;
 `

@@ -34,6 +34,7 @@ export const MyIconButton = styled.button`
   &:hover {
     cursor: pointer;
     color: #ffffff;
+    transform: scale(1.1)
   }
 `
 export const MyTextField = styled.textarea`

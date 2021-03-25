@@ -18,7 +18,7 @@ export const ModalContainer = styled.div`
   height: 100%;
   top: 0;
   left: 0;
-  z-index: 1;
+  z-index: 1001;
   display: none;
 `
 export const MyForm = styled.form`

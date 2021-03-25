@@ -31,14 +31,12 @@ const StartupCard: React.FC<StartupInterface> = (
           <div>{props.startup.industry}</div>
         </div>
       </CardTopWrapper>
-      <CardMiddleWrapper>
-        {props.startup.shortDescription}
-      </CardMiddleWrapper>
+      <CardMiddleWrapper>{props.startup.shortDescription}</CardMiddleWrapper>
       <CardBottomWrapper>
         <CardBottomGroup>
           <MyIconButton>
             <ModeCommentRoundedIcon />
-            <div>{props.startup.comments.length}</div>
+            <div>{props.startup.comments}</div>
           </MyIconButton>
         </CardBottomGroup>
         <CardBottomGroup>
