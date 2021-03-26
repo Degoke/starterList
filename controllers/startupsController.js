@@ -1,4 +1,4 @@
-const Project = require("../models/project");
+const Startup = require("../models/startup");
 const User = require("../models/user");
 
 module.exports = {

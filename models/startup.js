@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-projectSchema = new Schema({
+startupSchema = new Schema({
     title: {
         type: String,
         required:true
@@ -24,4 +24,4 @@ projectSchema = new Schema({
 
 
 
-module.exports = mongoose.model("Project",projectSchema);
+module.exports = mongoose.model("Startup",startupSchema);
