@@ -69,12 +69,7 @@ module.exports = {
             next(error);
         })
     },
-    authenticate: passport.authenticate("local",{
-        failureRedirect: "/users/login",
-        failureFlash: "Failed to login",
-        successRedirect: "/",
-        successFlash: "Logged in!"
-    }),
+    authenticate: passport.authenticate("local"),
     respondJSON: (error,req,res,next)=>{
         let resObj;
         if(error){
