@@ -1,5 +1,4 @@
 const Startup = require("../models/startup");
-const User = require("../models/user");
 
 function getStartupParams(obj){
     return {
@@ -76,29 +75,24 @@ module.exports = {
             next(error);
         })
     },
-    respondJSON: (error,req,res,next)=>{
-        let resObj;
-        if(error){
-            resObj = {
-                status: 500,
-                message: error.message,
-                data: null
-            };
-            res.status(500).json(resObj);
-        } else {
-            resObj = {
+    respondJSON: (req,res,next)=>{
+        resObj = {
                 status: 200,
                 message: "success",
                 data : res.locals
             };
-            res.status(200).json(resObj);
-        }
+        res.status(200).json(resObj);
     },
     index: (req,res,next)=>{
         Startup.find({})
         .then(startups => {
-            res.locals.startups = startups;
-            next();
+            if(startups){
+                res.locals.startups = startups;
+                console.log(`When getting startups, found ${typeof(startups)}`);
+                next();
+            }else{
+                next(new Error("No startups found"));
+            }
         })
         .catch(error => {
             console.log(`Error fetching startups: ${error.message}`);

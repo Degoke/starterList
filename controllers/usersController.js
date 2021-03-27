@@ -49,7 +49,7 @@ module.exports = {
         let userId = req.params.id;
         User.findByIdAndRemove(userId)
         .then(user => {
-                res.locals = null;
+                res.locals.user = "deleted successfully";
                 next();
         })
         .catch(error => {
@@ -70,27 +70,16 @@ module.exports = {
         })
     },
     authenticate: passport.authenticate("local"),
-    respondJSON: (error,req,res,next)=>{
-        let resObj;
-        if(error){
-            resObj = {
-                status: 500,
-                message: error.message,
-                data: null
-            };
-            res.status(500).json(resObj);
-        } else {
-            resObj = {
+    respondJSON: (req,res,next)=>{
+        resObj = {
                 status: 200,
                 message: "success",
                 data : res.locals
             };
-            res.status(200).json(resObj);
-        }
+        res.status(200).json(resObj);
     },
     logout: (req,res,next) => {
         req.logout();
-        res.locals = null;
         next();
     }
 };

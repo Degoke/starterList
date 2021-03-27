@@ -8,7 +8,7 @@ const cookieParser = require("cookie-parser");
 const expressSession = require("express-session");
 const User = require("./models/user");
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/hackathon",
+mongoose.connect(process.env.MONGODB_URI,
     {useCreateIndex:true,useFindAndModify:true,useNewUrlParser:true,useUnifiedTopology:true});
 const db = mongoose.connection;
 db.once("open",()=>{
@@ -37,5 +37,7 @@ app.use((req,res,next)=>{
     res.locals.currentUser = req.user;
     next();
 });
+
 app.use("/",router);
+
 app.listen(app.get("port"),console.log(`Express server running on port ${app.get("port")}`));

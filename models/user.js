@@ -31,10 +31,6 @@ const userSchema = new Schema({
     }]
 },{timestamps:true});
 
-userSchema.virtual("fullName").get(function(){
-    return `${this.name.first} ${this.name.last}`;
-});
-
 
 userSchema.plugin(passportLocalMongoose,{usernameField:"email"});
 
