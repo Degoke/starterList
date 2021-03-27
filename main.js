@@ -7,6 +7,7 @@ const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const expressSession = require("express-session");
 const User = require("./models/user");
+const cors = require("cors");
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URI,
     {useCreateIndex:true,useFindAndModify:true,useNewUrlParser:true,useUnifiedTopology:true});
