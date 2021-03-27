@@ -1,4 +1,3 @@
-const Startup = require("../models/startup");
 const User = require("../models/user");
 const passport = require("passport");
 
@@ -58,7 +57,7 @@ module.exports = {
     },
     show:(req,res,next)=>{
         let userId = req.params.id;
-        User.findById(userId)
+        User.findById(userId).populate("startups").populate("comments")
         .then(user =>{
             res.locals.user = user;
             next();
