@@ -68,7 +68,7 @@ module.exports = {
             next(error);
         })
     },
-    authenticate: passport.authenticate("local"),
+    authenticate: passport.authenticate("local",{session:false}),
     respondJSON: (req,res,next)=>{
         resObj = {
                 status: 200,
