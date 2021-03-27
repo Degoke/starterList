@@ -88,7 +88,6 @@ module.exports = {
         .then(startups => {
             if(startups){
                 res.locals.startups = startups;
-                console.log(`When getting startups, found ${typeof(startups)}`);
                 next();
             }else{
                 next(new Error("No startups found"));
