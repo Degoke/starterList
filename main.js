@@ -8,6 +8,7 @@ const cookieParser = require("cookie-parser");
 const expressSession = require("express-session");
 const User = require("./models/user");
 const cors = require("cors");
+
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URI,
     {useCreateIndex:true,useFindAndModify:true,useNewUrlParser:true,useUnifiedTopology:true});
@@ -16,6 +17,7 @@ db.once("open",()=>{
         console.log("Succesfully connected to Database");
     });
 app.set("port", process.env.PORT || 3000);
+app.use(cors);
 app.use(express.static("public"));
 app.use(express.urlencoded({extended:false}));
 app.use(express.json());
