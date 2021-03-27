@@ -65,7 +65,7 @@ module.exports = {
     },
     retrieve:(req,res,next)=>{
         let startupId = req.params.id;
-        Startup.findById(startupId).populate("owner").populate("comments")
+        Startup.findById(startupId)
         .then(startup =>{
             res.locals.startup = startup;
             next();
@@ -84,7 +84,7 @@ module.exports = {
         res.status(200).json(resObj);
     },
     index: (req,res,next)=>{
-        Startup.find({}).populate("owner").populate("comments")
+        Startup.find({})
         .then(startups => {
             if(startups){
                 res.locals.startups = startups;

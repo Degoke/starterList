@@ -4,16 +4,15 @@ const { Schema } = mongoose;
 startupSchema = new Schema({
     name: {
         type: String,
-        required:true
+        trim: true
     },
     shortDescription: {
         type: String,
-        required: true
     },
     owner: {
         type: Schema.Types.ObjectId,
         ref: "User",
-        required:true
+        autopopulate: true
     },
     ratings: {
         type: Number,
@@ -28,7 +27,8 @@ startupSchema = new Schema({
     comments: [{
         author: {
             type: Schema.Types.ObjectId,
-            ref: "User"
+            ref: "User",
+            autopopulate: true
         },
         comment: String
     }],
@@ -42,6 +42,7 @@ startupSchema = new Schema({
 
 },{timestamps:true});
 
+startupSchema.plugin(require("mongoose-autopopulate"));
 
 
 module.exports = mongoose.model("Startup",startupSchema);

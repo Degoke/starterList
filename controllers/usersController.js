@@ -57,7 +57,7 @@ module.exports = {
     },
     show:(req,res,next)=>{
         let userId = req.params.id;
-        User.findById(userId).populate("startups").populate("comments")
+        User.findById(userId)
         .then(user =>{
             res.locals.user = user;
             next();

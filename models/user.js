@@ -9,13 +9,12 @@ const userSchema = new Schema({
     },
     email: {
         type: String,
-        required: true,
-        lowercase: true,
         unique: true
     },
     startups: [{
         type: Schema.Types.ObjectId,
-        ref: "Startup"
+        ref: "Startup",
+        autopopulate: true
     }],
     phone: String,
     profileImage: String,
@@ -25,7 +24,8 @@ const userSchema = new Schema({
     comments: [{
         startup: {
             type: Schema.Types.ObjectId,
-            ref: "Startup"
+            ref: "Startup",
+            autopopulate: true
         },
         comment: String
     }]
@@ -33,5 +33,6 @@ const userSchema = new Schema({
 
 
 userSchema.plugin(passportLocalMongoose,{usernameField:"email"});
+userSchema.plugin(require("mongoose-autopopulate"));
 
 module.exports = mongoose.model("User",userSchema);
