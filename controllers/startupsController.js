@@ -131,7 +131,7 @@ module.exports = {
                 next();
         })
         .catch(error => {
-            console.log(`Error adding comment: ${error.message}`);
+            console.log(`Error adding upvote: ${error.message}`);
             next(error);
         });
     }
