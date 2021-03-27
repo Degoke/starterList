@@ -18,7 +18,6 @@ function getUserParams(obj){
 
 module.exports = {
     new:(req,res,next)=>{
-        if(req.skip) next();
         let newUser = new User(getUserParams(req.body));
         User.register(newUser,req.body.password, (error, user)=>{
             if(user){
