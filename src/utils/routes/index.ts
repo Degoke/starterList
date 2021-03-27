@@ -9,7 +9,7 @@ const routes: RouteInterface[] = [
     component: HomePage,
   },
   {
-    path: '/details',
+    path: '/details/:id',
     name: 'Details',
     component: DetailsPage,
   },

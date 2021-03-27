@@ -31,10 +31,17 @@ export const MyIconButton = styled.button`
   border: none;
   color: ${(props) => props.theme.color.text};
   background-color: inherit;
+  margin: auto 0.5rem;
+  p {
+    visibility: hidden;
+  }
   &:hover {
     cursor: pointer;
     color: #ffffff;
-    transform: scale(1.1)
+    transform: scale(1.1);
+    p {
+      visibility: visible;
+    }
   }
 `
 export const MyTextField = styled.textarea`
@@ -57,4 +64,11 @@ export const MySelect = styled.select`
   &:focus {
     border-color: ${(props) => props.theme.color.secondary};
   }
+`
+export const MyFullImage = styled.img`
+  -webkit-box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.4);
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.4);
+  transform: scale(1.1);
+  margin: 1rem auto;
 `

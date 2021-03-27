@@ -6,17 +6,21 @@ import {
   HomeDisplayArea,
   HomeSideArea,
   HomeWrapper,
+  FilterDiv,
 } from './components'
 import data from '../../mock-backend/mock-data'
-import { useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect, useRef } from 'react'
 import { MainContext } from '../../utils/global/context'
 import { MyInput, MySelect } from '../../components/global'
 import { MyForm, SubmitButton } from '../../components/forms/components'
+import ProfileCard from '../../components/forms/profile-card'
 
 const HomePage: React.FC = (): React.ReactElement => {
   const { currentTag } = useContext(MainContext)
 
   const [startups, setStartups] = useState(data)
+
+  const profile = useRef<HTMLDivElement>(null)
 
   const dinstinctDates = Array.from(new Set(data.map((x) => x.dateAdded)))
 
@@ -25,6 +29,12 @@ const HomePage: React.FC = (): React.ReactElement => {
   const dinstinctLocations = Array.from(new Set(data.map((x) => x.location)))
 
   const fundingRounds = Array.from(new Set(data.map((x) => x.fundRaisingRound)))
+
+  const showProfile = () => {
+    if (profile.current) {
+      profile.current.style.display = 'flex'
+    }
+  }
 
   useEffect(() => {
     if (currentTag === 'All') {
@@ -37,6 +47,7 @@ const HomePage: React.FC = (): React.ReactElement => {
   return (
     <div>
       <NavBar />
+      <ProfileCard ref={profile} />
       <HomeWrapper>
         <HomeDisplayArea>
           <h1>Find the latest startups...</h1>
@@ -47,7 +58,12 @@ const HomePage: React.FC = (): React.ReactElement => {
                 .sort((a, b) => (b.ratings > a.ratings ? 1 : -1))
                 .slice(0, 3)
                 .map((d, i) => (
-                  <StartupCard key={i} startup={d} />
+                  <StartupCard
+                    key={i}
+                    startup={d}
+                    showProfile={showProfile}
+                    id={d.id.$oid}
+                  />
                 ))}
             </CardSection>
           </DisplaySet>
@@ -60,7 +76,12 @@ const HomePage: React.FC = (): React.ReactElement => {
                   {startups
                     .filter((startup) => startup.dateAdded === date)
                     .map((startup, i) => (
-                      <StartupCard key={i} startup={startup} />
+                      <StartupCard
+                        key={i}
+                        startup={startup}
+                        showProfile={showProfile}
+                        id={startup.id.$oid}
+                      />
                     ))}
                 </CardSection>
               </DisplaySet>
@@ -76,8 +97,9 @@ const HomePage: React.FC = (): React.ReactElement => {
             </MySelect>
           </label>
           <h1>Filter</h1>
-          <label>
-            By Industry
+          <FilterDiv>
+            <label htmlFor="industry">By Industry</label>
+
             <MySelect name="industry">
               <option value="all">All</option>
               {dinstinctIndustries.map((ind, i) => (
@@ -86,9 +108,8 @@ const HomePage: React.FC = (): React.ReactElement => {
                 </option>
               ))}
             </MySelect>
-          </label>
-          <label>
-            By Location
+            <label htmlFor="location">By Location</label>
+
             <MySelect name="location">
               <option value="all">All</option>
               {dinstinctLocations.map((ind, i) => (
@@ -97,9 +118,9 @@ const HomePage: React.FC = (): React.ReactElement => {
                 </option>
               ))}
             </MySelect>
-          </label>
-          <label>
-            By Funding Round
+
+            <label htmlFor="funding">By Funding Round</label>
+
             <MySelect name="funding">
               <option value="all">All</option>
               {fundingRounds.map((ind, i) => (
@@ -108,13 +129,14 @@ const HomePage: React.FC = (): React.ReactElement => {
                 </option>
               ))}
             </MySelect>
-          </label>
+          </FilterDiv>
+
           <h1>Subscribe to our Newsletter</h1>
           <MyForm>
-            <label>
-              Email Address
-              <MyInput type="email" name="subscribe" />
-            </label>
+            <label htmlFor="email">Email Address</label>
+
+            <MyInput type="email" name="subscribe" />
+
             <SubmitButton value="Subscribe" />
           </MyForm>
         </HomeSideArea>

@@ -11,42 +11,55 @@ import ModeCommentRoundedIcon from '@material-ui/icons/ModeCommentRounded'
 import ThumbUpRoundedIcon from '@material-ui/icons/ThumbUpRounded'
 import AccountCircleRoundedIcon from '@material-ui/icons/AccountCircleRounded'
 import { MyIconButton } from '../global'
+import { useHistory } from 'react-router-dom'
 
 export interface StartupInterface {
   key: number
   startup: StartupDataInterface
+  showProfile: () => void
+  id: string
 }
 
 const StartupCard: React.FC<StartupInterface> = (
   props: StartupInterface
 ): React.ReactElement => {
+  const history = useHistory()
+
+  const showDetails = () => {
+    history.push(`/details/${props.id}`)
+  }
+
   return (
     <CardWrapper>
       <div>
-        <ImageWrapper src={props.startup.images} />
+        <ImageWrapper src={props.startup.images} onClick={showDetails} />
       </div>
-      <CardTopWrapper>
+      <CardTopWrapper onClick={showDetails}>
         <div>
-          <div>{props.startup.name}</div>
-          <div>{props.startup.industry}</div>
+          <div style={{ fontSize: '1.2rem' }}>{props.startup.name}</div>
+          <div style={{ fontSize: '0.6rem' }}>{props.startup.industry}</div>
         </div>
       </CardTopWrapper>
-      <CardMiddleWrapper>{props.startup.shortDescription}</CardMiddleWrapper>
+      <CardMiddleWrapper onClick={showDetails}>
+        {props.startup.shortDescription}
+      </CardMiddleWrapper>
       <CardBottomWrapper>
         <CardBottomGroup>
-          <MyIconButton>
-            <ModeCommentRoundedIcon />
-            <div>{props.startup.comments}</div>
-          </MyIconButton>
-        </CardBottomGroup>
-        <CardBottomGroup>
-          <MyIconButton>
-            <ThumbUpRoundedIcon />
-            <div>{props.startup.ratings}</div>
-          </MyIconButton>
+          <CardBottomGroup>
+            <MyIconButton>
+              <ModeCommentRoundedIcon onClick={showDetails} />
+              <div>{props.startup.comments}</div>
+            </MyIconButton>
+          </CardBottomGroup>
+          <CardBottomGroup>
+            <MyIconButton>
+              <ThumbUpRoundedIcon />
+              <div>{props.startup.ratings}</div>
+            </MyIconButton>
+          </CardBottomGroup>
         </CardBottomGroup>
         <div>
-          <MyIconButton>
+          <MyIconButton onClick={props.showProfile}>
             <AccountCircleRoundedIcon fontSize="large" />
           </MyIconButton>
         </div>

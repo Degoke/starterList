@@ -3,13 +3,20 @@ import { MyIconButton } from '../global/index'
 
 export const ModalWrapper = styled.div`
   width: 60%;
-  margin: 5% auto;
+  margin: 5% auto 2%;
   background-color: ${(props) => props.theme.color.primary};
   padding: 2rem;
   -webkit-box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.3);
   -moz-box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.3);
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.3);
-  overflow-y: auto;
+  overflow: auto;
+  @media all and (max-width: 600px) {
+    padding: 1rem;
+  }
+  @media all and (max-width: 450px) {
+    padding: 0.5rem;
+    width: 85%;
+  }
 `
 export const ModalContainer = styled.div`
   position: fixed;

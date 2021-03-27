@@ -11,6 +11,7 @@ declare module 'styled-components' {
 
     font: {
       big: string
+      medium: string
       small: string
       family: string
     }

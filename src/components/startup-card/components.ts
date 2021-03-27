@@ -14,19 +14,17 @@ export const CardWrapper = styled.div`
   }
 `
 export const CardTopWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 0.1rem 1rem;
+  padding: 0 1rem;
 `
 export const CardBottomWrapper = styled.div`
   display: flex;
   align-items: center;
   padding: 0.5rem 1rem;
+  justify-content: space-between;
 `
 export const CardMiddleWrapper = styled.div`
-  padding: 0.2rem 1rem;
+  padding: 0.5rem 1rem;
   height: 100%;
-  text-align: center;
 `
 export const CardBottomGroup = styled.div`
   display: flex;
@@ -40,7 +38,7 @@ export const AvatarImage = styled.img`
 `
 export const ImageWrapper = styled.img`
   width: 100%;
-  height: 10rem;
+  height: 8rem;
   border-bottom-left-radius: 10%;
   border-bottom-right-radius: 10%;
   border-top-left-radius: 5px;
