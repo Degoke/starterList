@@ -4,7 +4,6 @@ const app = express();
 const passport = require("passport");
 const router = require("./routes/index");
 const mongoose = require("mongoose");
-const methodOverride = require("method-override");
 const cookieParser = require("cookie-parser");
 const expressSession = require("express-session");
 const User = require("./models/user");
@@ -38,6 +37,5 @@ app.use((req,res,next)=>{
     res.locals.currentUser = req.user;
     next();
 });
-app.use(methodOverride("_method",{ methods: ["POST","GET"]}));
 app.use("/",router);
 app.listen(app.get("port"),console.log(`Express server running on port ${app.get("port")}`));
