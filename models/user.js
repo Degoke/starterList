@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
+const passportLocalMongoose = require("passport-local-mongoose");
 
 const userSchema = new Schema({
     name: {
@@ -18,9 +19,21 @@ const userSchema = new Schema({
         lowercase: true,
         unique: true
     },
-    projects: [{
+    startups: [{
         type: Schema.Types.ObjectId,
-        ref: "Project"
+        ref: "Startup"
+    }],
+    phone: String,
+    profileImage: String,
+    twitter: String,
+    github: String,
+    occupation: String,
+    comments: [{
+        startup: {
+            type: Schema.Types.ObjectId,
+            ref: "Startup"
+        },
+        comment: String
     }]
 },{timestamps:true});
 
@@ -28,5 +41,7 @@ userSchema.virtual("fullName").get(function(){
     return `${this.name.first} ${this.name.last}`;
 });
 
+
+userSchema.plugin(passportLocalMongoose,{usernameField:"email"});
 
 module.exports = mongoose.model("User",userSchema);

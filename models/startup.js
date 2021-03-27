@@ -2,24 +2,44 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 startupSchema = new Schema({
-    title: {
+    name: {
         type: String,
         required:true
     },
-    description: {
+    shortDescription: {
         type: String,
         required: true
     },
-    author: {
+    owner: {
         type: Schema.Types.ObjectId,
         ref: "User",
         required:true
     },
-    upvotes: {
+    ratings: {
         type: Number,
         min:[0,"Upvotes cannot be negative"],
         default: 0
-    }
+    },
+    industry: String,
+    location: String,
+    logo: String,
+    website: String,
+    images: String,
+    comments: [{
+        author: {
+            type: Schema.Types.ObjectId,
+            ref: "User"
+        },
+        comment: String
+    }],
+    dateFounded: Date,
+    fundRaisingRound: String,
+    existingInvestors: String,
+    longDescription: String,
+    totalFunding: String,
+    userMetrics: String,
+    ownerImage: String
+
 },{timestamps:true});
 
 
