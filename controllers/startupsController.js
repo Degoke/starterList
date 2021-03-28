@@ -97,7 +97,7 @@ module.exports = {
         res.status(200).json(resObj);
     },
     index: (req,res,next)=>{
-        Startup.find({}).populate("owner","name").populate({path:"comments",populate:"startup"})
+        Startup.find({}).populate("owner","name").populate({path:"comments.startup"})
         .then(startups => {
             if(startups){
                 res.locals.startups = startups;
