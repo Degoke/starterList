@@ -23,10 +23,6 @@ app.use(passport.initialize());
 passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
-app.use((req,res,next)=>{
-    res.locals.currentUser = req.user;
-    next();
-});
 
 app.use("/",router);
 
