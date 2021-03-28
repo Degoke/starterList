@@ -4,7 +4,7 @@ const cloudinary = require('cloudinary').v2;
 
 function getUserParams(obj){
     if(obj.file){
-        cloudinary.uploader.upload(obj.file.buffer)
+        cloudinary.uploader.upload(obj.file.buffer.toString('base64'))
         .then(image=>{
             let url = image.url;
             return {
