@@ -49,7 +49,7 @@ startupSchema.post("findByIdAndUpdate",function(next){
     let startup = this;
     if(startup.comments.length > 0){
         startup.comments.forEach(comment => {
-            User.findByIdAndUpdate(comment.author,{$addToSet:comment})
+            User.findByIdAndUpdate(comment.author,{$addToSet:{comments:{startup:startup._id,comment:comment.comment}}})
             .then(user=>{
                 next();
             })
