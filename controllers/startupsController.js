@@ -1,4 +1,5 @@
 const Startup = require("../models/startup");
+const User = require("../models/user");
 
 function getStartupParams(obj){
     return {
@@ -27,8 +28,20 @@ module.exports = {
         let startupParams = getStartupParams(req.body);
         Startup.create(startupParams)
         .then(startup => {
-            res.locals.startup = startup;
-            next();
+            if(startup.owner && startup.owner != null){
+                User.findByIdAndUpdate(startup.owner,{
+                    $push:{startups:startup}
+                }).then(user => {
+                    res.locals.startup = startup;
+                    next();
+                }).catch(error => {
+                    console.log(`Error adding startup to user: ${error.message}`);
+                    next(error);
+                })
+            } else {
+                res.locals.startup = startup;
+                next();
+            }   
         })
         .catch(error => {
             console.log(`Error creating startup: ${error.message}`);
@@ -99,10 +112,12 @@ module.exports = {
         });
     },
     comment: (req,res,next)=>{
-        let startupId = req.params.id;
+        let startupId = req.params.id,
+         authorId = req.body.owner,
+         commentData = req.body.comment;
         let comment = {
-            author: req.body.owner,
-            comment: req.body.comment
+            author: authorId,
+            comment: commentData
         };
         Startup.findByIdAndUpdate(startupId, {
             $push:{
@@ -111,8 +126,19 @@ module.exports = {
             
         })
         .then(startup => {
+            let authorComment = {
+                startup: startupId,
+                comment: commentData
+            };
+            User.findByIdAndUpdate(authorId,{
+                $push:{comments:authorComment}
+            }).then(user => {
                 res.locals.success = true;
                 next();
+            }).catch(error => {
+                console.log(`Error adding comment to user: ${error.message}`);
+                next(error);
+            })
         })
         .catch(error => {
             console.log(`Error adding comment: ${error.message}`);
