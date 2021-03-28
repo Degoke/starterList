@@ -77,6 +77,9 @@ module.exports = {
     },
     authenticate: passport.authenticate("local",{session:false}),
     respondJSON: (req,res,next)=>{
+        if(req.user){
+            res.locals.currentUser = req.user;
+        }
         resObj = {
                 status: 200,
                 message: "success",
