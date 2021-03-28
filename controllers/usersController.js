@@ -1,23 +1,43 @@
 const User = require("../models/user");
 const passport = require("passport");
+const cloudinary = require('cloudinary').v2;
 
 function getUserParams(obj){
-    return {
-        name: obj.name,
-        email: obj.email,
-        phone: obj.phone,
-        profileImage: obj.profileImage,
-        twitter: obj.twitter,
-        github: obj.github,
-        occupation: obj.occupation,
-        startups: obj.startups,
-        comments: obj.comments};
-
+    if(obj.file){
+        cloudinary.uploader.upload(obj.file)
+        .then(image=>{
+            return {
+                name: obj.body.name,
+                email: obj.body.email,
+                phone: obj.body.phone,
+                profileImage: image.url,
+                twitter: obj.body.twitter,
+                github: obj.body.github,
+                occupation: obj.body.occupation,
+                startups: obj.body.startups,
+                comments: obj.body.comments};
+        })
+        .catch(error => {
+            console.log(`Error uploading profile image: ${error.message}`);
+            next(error);
+        })
+    } else {
+        return {
+            name: obj.body.name,
+            email: obj.body.email,
+            phone: obj.body.phone,
+            twitter: obj.body.twitter,
+            github: obj.body.github,
+            occupation: obj.body.occupation,
+            startups: obj.body.startups,
+            comments: obj.body.comments};
+    }
 };
+    
 
 module.exports = {
     new:(req,res,next)=>{
-        let newUser = new User(getUserParams(req.body));
+        let newUser = new User(getUserParams(req));
         User.register(newUser,req.body.password, (error, user)=>{
             if(user){
                 User.findById(user._id)
@@ -38,7 +58,7 @@ module.exports = {
 
     },
     update:(req,res,next)=>{
-        let userId = req.params.id, userParams = getUserParams(req.body);
+        let userId = req.params.id, userParams = getUserParams(req);
         User.findByIdAndUpdate(userId, {
             $set: userParams
         })
