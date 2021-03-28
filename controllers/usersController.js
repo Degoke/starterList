@@ -4,7 +4,7 @@ const cloudinary = require('cloudinary').v2;
 
 function getUserParams(obj){
     if(obj.file){
-        cloudinary.uploader.upload(obj.file.profileImage.path)
+        cloudinary.uploader.upload(obj.file.profileImage.buffer)
         .then(image=>{
             let url = image.url;
             return {
