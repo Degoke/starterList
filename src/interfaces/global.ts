@@ -6,10 +6,20 @@ export type FundRaisingRoundsType =
   | 'series-c'
   | 'none'
 
+export interface CommentInterface {
+  author?: string
+  startup?: string
+  comment: string
+}
+
+export interface UserStartups {
+  _id: string
+  name: string
+  shortDescription?: string
+}
+
 export interface StartupDataInterface {
-  id: {
-    $oid: string
-  }
+  _id: string
   name: string
   shortDescription: string
   industry: string
@@ -17,10 +27,9 @@ export interface StartupDataInterface {
   logo: string
   website: string
   images: string
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  comments: number
+  comments: CommentInterface[]
   ratings: number
-  dateFounded: string
+  dateFounded: Date
   fundRaisingRound: FundRaisingRoundsType
   existingInvestors: string | string[]
   longDescription: string
@@ -28,5 +37,18 @@ export interface StartupDataInterface {
   userMetrics: string
   owner: string
   ownerImage: string
-  dateAdded: string
+  createdAt?: Date
+}
+
+export interface UserInterface {
+  _id: string
+  name: string
+  email: string
+  startups: UserStartups[]
+  phone: string
+  profileImage: string
+  twitter: string
+  github: string
+  occupation: string
+  comments: CommentInterface[]
 }

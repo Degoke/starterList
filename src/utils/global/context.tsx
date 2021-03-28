@@ -1,16 +1,9 @@
-import { createContext, useState, useMemo } from 'react'
-
-export type CurrentTagType = string
-
-export type SetCurrentTagType = (
-  state: Partial<CurrentTagType>,
-  opts?: unknown
-) => void
+import { createContext, useState, useMemo, useEffect } from 'react'
 
 export type CurrentUserType = string
 
 export type SetCurrentUserType = (
-  state: Partial<CurrentTagType>,
+  state: Partial<CurrentUserType>,
   opts?: unknown
 ) => void
 
@@ -19,32 +12,35 @@ export interface MainContextProviderInterface {
 }
 
 export interface MainContextInterface {
-  currentTag?: CurrentTagType
-  setCurrentTag?: SetCurrentTagType
   currentUser?: CurrentUserType
   setCurrentUser?: SetCurrentUserType
 }
 
 export const MainContext = createContext<MainContextInterface>({
-  currentTag: 'All',
+  currentUser: 'none',
 })
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const MainContextProvider = ({
   children,
 }: MainContextProviderInterface) => {
-  const [currentTag, setCurrentTag] = useState('All')
-
   const [currentUser, setCurrentUser] = useState('')
+
+  useEffect(() => {
+    const user = localStorage.getItem('user')
+    if (user === null) {
+      setCurrentUser('none')
+    } else {
+      setCurrentUser(user)
+    }
+  }, [])
 
   const value: MainContextInterface = useMemo(
     () => ({
-      currentTag,
       currentUser,
-      setCurrentTag,
       setCurrentUser,
     }),
-    [currentTag, currentUser]
+    [currentUser]
   )
 
   return <MainContext.Provider value={value}>{children}</MainContext.Provider>

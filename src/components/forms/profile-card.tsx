@@ -2,10 +2,16 @@ import { ModalWrapper, ModalContainer, QuitButton } from './components'
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded'
 import { forwardRef, useRef } from 'react'
 import { useCombinedRefs } from '../../utils/global/functions'
-import data from '../../mock-backend/mock-data'
+
+import { Loading } from '../global'
+import { UserInterface } from '../../interfaces/global'
+
+export interface ProfileProps {
+  data: UserInterface | undefined
+}
 
 const ProfileCard = forwardRef(
-  (props, ref: React.Ref<HTMLDivElement>): React.ReactElement => {
+  (props: ProfileProps, ref: React.Ref<HTMLDivElement>): React.ReactElement => {
     const innerRef = useRef(null)
     const combinedRef = useCombinedRefs(ref, innerRef)
 
@@ -23,14 +29,20 @@ const ProfileCard = forwardRef(
           <QuitButton onClick={closeLogin}>
             <CloseRoundedIcon />
           </QuitButton>
-          <h1>Profile</h1>
-          <img src={data[6].ownerImage} />
-          <h2>{data[6].owner}</h2>
-          <p>Occupation</p>
-          <p>{data[6].shortDescription}</p>
-          <p>startups</p>
-          <img src={data[6].logo} />
-          <h1>Comments</h1>
+          {props.data === undefined ? (
+            <Loading>Loading</Loading>
+          ) : (
+            <>
+              <h1>Profile</h1>
+              <p>{props.data.name}</p>
+              <p>Occupation</p>
+              {props.data.occupation}
+              <p>startups</p>
+              {props.data.startups.map((startup) => startup.name)}
+              <h1>Comments</h1>
+              {props.data.comments.map((comment) => comment)}
+            </>
+          )}
         </ModalWrapper>
       </ModalContainer>
     )

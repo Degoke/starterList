@@ -1,7 +1,6 @@
 import { MyForm, SubmitButton } from '../../components/forms/components'
 import { MyTextField, MyIconButton, MyFullImage } from '../../components/global'
 import NavBar from '../../components/navbar'
-import data from '../../mock-backend/mock-data'
 import {
   ColumnGroup,
   CommentBox,
@@ -19,6 +18,7 @@ import AccountCircleRounded from '@material-ui/icons/AccountCircleRounded'
 import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { StartupDataInterface } from '../../interfaces/global'
+import axios from 'axios'
 
 export interface ParamsInterface {
   id?: string
@@ -30,7 +30,17 @@ const DetailsPage: React.FC = (): React.ReactElement => {
   const [startup, setStartup] = useState<StartupDataInterface>()
 
   useEffect(() => {
-    setStartup(data.filter((d) => d.id.$oid === id)[0])
+    const getStartup = async (): Promise<void> => {
+      try {
+        const response = await axios.get(
+          `https://starter-list-backend.glitch.me/api/startups/${id}`
+        )
+        setStartup(response.data.data.startup)
+      } catch (err) {
+        alert('omo server is down o')
+      }
+    }
+    getStartup()
   }, [id])
 
   return (
@@ -50,7 +60,7 @@ const DetailsPage: React.FC = (): React.ReactElement => {
               <RowGroup>
                 <ColumnGroup>
                   <h3>Team</h3>
-                  <p>{startup.owner}</p>
+                  <p>owner</p>
                 </ColumnGroup>
                 <ColumnGroup>
                   <h3>Location</h3>
@@ -98,7 +108,7 @@ const DetailsPage: React.FC = (): React.ReactElement => {
             </div>
           </DetailsWrapper>
           <DiscussionsWrapper>
-            <h1>Discussion</h1>
+            <h1 id="discussion">Discussion</h1>
             <MyForm>
               <label htmlFor="comment">Add a Comment...</label>
 

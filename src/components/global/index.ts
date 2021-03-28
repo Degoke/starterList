@@ -72,3 +72,7 @@ export const MyFullImage = styled.img`
   transform: scale(1.1);
   margin: 1rem auto;
 `
+export const Loading = styled.div`
+  width: 60%;
+  margin: 20% auto;
+`

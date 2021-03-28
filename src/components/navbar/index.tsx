@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect, useContext } from 'react'
 import {
   NavWrapper,
   RightNavWrapper,
@@ -12,6 +12,10 @@ import { MyButton } from '../global'
 import SignUp from '../forms/sign-up'
 import AddStartup from '../forms/add-startup'
 import { useLocation, Link } from 'react-router-dom'
+import { MainContext } from '../../utils/global/context'
+import ProfileCard from '../forms/profile-card'
+import { UserInterface } from '../../interfaces/global'
+import axios from 'axios'
 
 export type NavLinksType = 'login' | 'register' | 'add'
 
@@ -27,6 +31,12 @@ const NavBar: React.FC = (): React.ReactElement => {
   const [open, setOpen] = useState<boolean>(false)
 
   const { pathname } = useLocation()
+
+  const { currentUser } = useContext(MainContext)
+
+  const [userName, setUserName] = useState<string | null>(null)
+
+  const [data, setData] = useState<UserInterface>()
 
   const showLogin = (e: React.MouseEvent<HTMLButtonElement>): void => {
     switch ((e.target as Element).id) {
@@ -50,6 +60,10 @@ const NavBar: React.FC = (): React.ReactElement => {
     }
   }
 
+  useEffect(() => {
+    setUserName(localStorage.getItem('name'))
+  }, [currentUser])
+
   const toggleMenu = () => {
     setOpen(!open)
     if (menu.current) {
@@ -59,6 +73,28 @@ const NavBar: React.FC = (): React.ReactElement => {
         menu.current.style.display = 'none'
       }
     }
+  }
+
+  const profile = useRef<HTMLDivElement>(null)
+
+  const showProfile = () => {
+    if (profile.current) {
+      profile.current.style.display = 'flex'
+    }
+    const getCurrentUser = async (): Promise<void> => {
+      try {
+        const response = await axios.get(
+          `https://starter-list-backend.glitch.me/api/users/${currentUser}`
+        )
+
+        if (response.data.status === 200) {
+          setData(response.data.data.user)
+        }
+      } catch (err) {
+        alert('error')
+      }
+    }
+    getCurrentUser()
   }
   return (
     <>
@@ -79,16 +115,28 @@ const NavBar: React.FC = (): React.ReactElement => {
                 Add a startup
               </MyButton>
             </NavList>
-            <NavList>
-              <MyButton id="register" onClick={showLogin}>
-                Sign Up
-              </MyButton>
-            </NavList>
-            <NavList>
-              <MyButton id="login" onClick={showLogin}>
-                Sign In
-              </MyButton>
-            </NavList>
+            {currentUser !== 'none' ? (
+              <>
+                <NavList>
+                  <MyButton id="register" onClick={showProfile}>
+                    {userName}
+                  </MyButton>
+                </NavList>
+              </>
+            ) : (
+              <>
+                <NavList>
+                  <MyButton id="register" onClick={showLogin}>
+                    Sign Up
+                  </MyButton>
+                </NavList>
+                <NavList>
+                  <MyButton id="login" onClick={showLogin}>
+                    Sign In
+                  </MyButton>
+                </NavList>
+              </>
+            )}
           </RightNavWrapper>
         ) : (
           <RightNavWrapper>
@@ -120,20 +168,33 @@ const NavBar: React.FC = (): React.ReactElement => {
             Add a startup
           </MyButton>
         </NavList>
-        <NavList>
-          <MyButton id="register" onClick={showLogin}>
-            Sign Up
-          </MyButton>
-        </NavList>
-        <NavList>
-          <MyButton id="login" onClick={showLogin}>
-            Sign In
-          </MyButton>
-        </NavList>
+        {currentUser !== 'none' ? (
+          <>
+            <NavList>
+              <MyButton id="register" onClick={showProfile}>
+                {userName}
+              </MyButton>
+            </NavList>
+          </>
+        ) : (
+          <>
+            <NavList>
+              <MyButton id="register" onClick={showLogin}>
+                Sign Up
+              </MyButton>
+            </NavList>
+            <NavList>
+              <MyButton id="login" onClick={showLogin}>
+                Sign In
+              </MyButton>
+            </NavList>
+          </>
+        )}
       </NavMenu>
       <SignIn ref={login} />
       <SignUp ref={register} />
       <AddStartup ref={add} />
+      <ProfileCard ref={profile} data={data} />
     </>
   )
 }

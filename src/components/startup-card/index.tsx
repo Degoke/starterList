@@ -12,6 +12,8 @@ import ThumbUpRoundedIcon from '@material-ui/icons/ThumbUpRounded'
 import AccountCircleRoundedIcon from '@material-ui/icons/AccountCircleRounded'
 import { MyIconButton } from '../global'
 import { useHistory } from 'react-router-dom'
+import { useState, useRef } from 'react'
+import axios from 'axios'
 
 export interface StartupInterface {
   key: number
@@ -25,8 +27,28 @@ const StartupCard: React.FC<StartupInterface> = (
 ): React.ReactElement => {
   const history = useHistory()
 
+  const [votes, setVotes] = useState(props.startup.ratings)
+
+  const vote = useRef<HTMLButtonElement | null>(null)
+
   const showDetails = () => {
-    history.push(`/details/${props.id}`)
+    history.push(`/details/${props.id}#discussion`)
+  }
+
+  const upVote = async (): Promise<void> => {
+    try {
+      const response = await axios.post(
+        `https://starter-list-backend.glitch.me/api/startups/${props.id}/upvote`
+      )
+      if (response.data.status === 200) {
+        setVotes((prevVotes) => prevVotes + 1)
+        if (vote.current) {
+          vote.current.style.color = '#000000'
+        }
+      }
+    } catch (err) {
+      alert(`${err}voting`)
+    }
   }
 
   return (
@@ -48,13 +70,13 @@ const StartupCard: React.FC<StartupInterface> = (
           <CardBottomGroup>
             <MyIconButton>
               <ModeCommentRoundedIcon onClick={showDetails} />
-              <div>{props.startup.comments}</div>
+              <div>{props.startup.comments?.length}</div>
             </MyIconButton>
           </CardBottomGroup>
           <CardBottomGroup>
-            <MyIconButton>
+            <MyIconButton onClick={upVote} ref={vote}>
               <ThumbUpRoundedIcon />
-              <div>{props.startup.ratings}</div>
+              <div>{votes}</div>
             </MyIconButton>
           </CardBottomGroup>
         </CardBottomGroup>

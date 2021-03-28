@@ -16,7 +16,7 @@ export const HomeWrapper = styled.div`
   width: 95%;
   margin-right: 0;
   margin-left: 2rem;
-  margin-top: 3rem;
+  margin-top: 4rem;
   margin-bottom: 2rem;
   display: grid;
   grid-template-columns: 3fr 1fr;
@@ -44,8 +44,8 @@ export const HomeSideArea = styled.aside`
   position: fixed;
   right: 0;
   width: 20%;
-  @media all and (max-width: 500px) {
-    padding: 0.5rem;
+  @media all and (max-width: 600px) {
+    visibility: hidden;
   }
 `
 export const DisplaySet = styled.div`

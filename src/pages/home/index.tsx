@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import NavBar from '../../components/navbar'
 import StartupCard from '../../components/startup-card'
 import {
@@ -6,29 +7,37 @@ import {
   HomeDisplayArea,
   HomeSideArea,
   HomeWrapper,
-  FilterDiv,
 } from './components'
-import data from '../../mock-backend/mock-data'
-import { useContext, useState, useEffect, useRef } from 'react'
-import { MainContext } from '../../utils/global/context'
-import { MyInput, MySelect } from '../../components/global'
+import { useState, useEffect, useRef } from 'react'
+import { Loading, MyInput, MySelect } from '../../components/global'
 import { MyForm, SubmitButton } from '../../components/forms/components'
-import ProfileCard from '../../components/forms/profile-card'
+//import ProfileCard from '../../components/forms/profile-card'
+import { StartupDataInterface } from '../../interfaces/global'
+import axios from 'axios'
+import { useLocation } from 'react-router-dom'
 
 const HomePage: React.FC = (): React.ReactElement => {
-  const { currentTag } = useContext(MainContext)
+  const [data, setData] = useState<StartupDataInterface[]>()
 
-  const [startups, setStartups] = useState(data)
+  const [sort, setSort] = useState('date')
+
+  const location = useLocation()
+
+  useEffect(() => {
+    const getAllStartups = async (): Promise<void> => {
+      try {
+        const response = await axios.get(
+          'https://starter-list-backend.glitch.me/api/startups/'
+        )
+        setData(response.data.data.startups)
+      } catch (err) {
+        alert(`omo server is down o`)
+      }
+    }
+    getAllStartups()
+  }, [location])
 
   const profile = useRef<HTMLDivElement>(null)
-
-  const dinstinctDates = Array.from(new Set(data.map((x) => x.dateAdded)))
-
-  const dinstinctIndustries = Array.from(new Set(data.map((x) => x.industry)))
-
-  const dinstinctLocations = Array.from(new Set(data.map((x) => x.location)))
-
-  const fundingRounds = Array.from(new Set(data.map((x) => x.fundRaisingRound)))
 
   const showProfile = () => {
     if (profile.current) {
@@ -36,100 +45,94 @@ const HomePage: React.FC = (): React.ReactElement => {
     }
   }
 
-  useEffect(() => {
-    if (currentTag === 'All') {
-      setStartups(data)
-    } else {
-      setStartups(data.filter((startup) => currentTag === startup.industry))
-    }
-  }, [currentTag])
+  const handleSort = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSort(e.target.value)
+  }
 
   return (
     <div>
       <NavBar />
-      <ProfileCard ref={profile} />
       <HomeWrapper>
         <HomeDisplayArea>
           <h1>Find the latest startups...</h1>
-          <DisplaySet>
-            <h3>Top Rated Startups</h3>
-            <CardSection>
-              {data
-                .sort((a, b) => (b.ratings > a.ratings ? 1 : -1))
-                .slice(0, 3)
-                .map((d, i) => (
-                  <StartupCard
-                    key={i}
-                    startup={d}
-                    showProfile={showProfile}
-                    id={d.id.$oid}
-                  />
-                ))}
-            </CardSection>
-          </DisplaySet>
-
-          {dinstinctDates.map((date, i) => {
-            return (
-              <DisplaySet key={i}>
-                <h4>{date}</h4>
+          {!data ? (
+            <Loading>
+              <h1>Loading... Bear with us Network no good</h1>
+            </Loading>
+          ) : (
+            <>
+              <DisplaySet>
+                <h3>Top Rated Startups</h3>
                 <CardSection>
-                  {startups
-                    .filter((startup) => startup.dateAdded === date)
-                    .map((startup, i) => (
+                  {data
+                    .sort((a: StartupDataInterface, b: StartupDataInterface) =>
+                      b.ratings > a.ratings ? 1 : -1
+                    )
+                    .slice(0, 3)
+                    .map((d: StartupDataInterface, i: number) => (
                       <StartupCard
                         key={i}
-                        startup={startup}
+                        startup={d}
                         showProfile={showProfile}
-                        id={startup.id.$oid}
+                        id={d._id as string}
                       />
                     ))}
                 </CardSection>
               </DisplaySet>
-            )
-          })}
+              {sort === 'date' ? (
+                Array.from(new Set(data.map((x) => x.createdAt))).map(
+                  (date, i) => {
+                    return (
+                      <DisplaySet key={i}>
+                        <h4>{date}</h4>
+                        <CardSection>
+                          {data
+                            .filter((startup) => startup.createdAt === date)
+                            .map((startup, i) => (
+                              <StartupCard
+                                key={i}
+                                startup={startup}
+                                showProfile={showProfile}
+                                id={startup._id}
+                              />
+                            ))}
+                        </CardSection>
+                      </DisplaySet>
+                    )
+                  }
+                )
+              ) : (
+                <DisplaySet>
+                  <h2>By Rating</h2>
+                  <CardSection>
+                    {data
+                      .sort(
+                        (a: StartupDataInterface, b: StartupDataInterface) =>
+                          b.ratings > a.ratings ? 1 : -1
+                      )
+                      .map((d: StartupDataInterface, i: number) => (
+                        <StartupCard
+                          key={i}
+                          startup={d}
+                          showProfile={showProfile}
+                          id={d._id as string}
+                        />
+                      ))}
+                  </CardSection>
+                </DisplaySet>
+              )}
+            </>
+          )}
         </HomeDisplayArea>
         <HomeSideArea>
           <h1>Sort</h1>
           <label>
-            <MySelect name="sort">
+            <MySelect name="sort" onChange={handleSort}>
               <option value="date">Date</option>
               <option value="rating">Rating</option>
             </MySelect>
           </label>
           <h1>Filter</h1>
-          <FilterDiv>
-            <label htmlFor="industry">By Industry</label>
-
-            <MySelect name="industry">
-              <option value="all">All</option>
-              {dinstinctIndustries.map((ind, i) => (
-                <option key={i} value={ind}>
-                  {ind.toUpperCase()}
-                </option>
-              ))}
-            </MySelect>
-            <label htmlFor="location">By Location</label>
-
-            <MySelect name="location">
-              <option value="all">All</option>
-              {dinstinctLocations.map((ind, i) => (
-                <option key={i} value={ind}>
-                  {ind.toUpperCase()}
-                </option>
-              ))}
-            </MySelect>
-
-            <label htmlFor="funding">By Funding Round</label>
-
-            <MySelect name="funding">
-              <option value="all">All</option>
-              {fundingRounds.map((ind, i) => (
-                <option key={i} value={ind}>
-                  {ind.toUpperCase()}
-                </option>
-              ))}
-            </MySelect>
-          </FilterDiv>
 
           <h1>Subscribe to our Newsletter</h1>
           <MyForm>
