@@ -24,6 +24,7 @@
     "mongodb": "^3.6.5",
     "mongoose": "^5.12.2",
     "mongoose-autopopulate": "^0.12.3",
+    "mongoose-file": "0.0.2",
     "passport": "^0.4.1",
     "passport-local-mongoose": "^6.1.0"
   }
