@@ -1,4 +1,5 @@
 const Startup = require("../models/startup");
+const { populate } = require("../models/user");
 const User = require("../models/user");
 
 function getStartupParams(obj){
@@ -54,7 +55,7 @@ module.exports = {
         startupId = req.params.id;
         Startup.findByIdAndUpdate(startupId, {
             $set: startupParams
-        })
+        },{new:true})
         .then(startup => {
                 res.locals.startup = startup;
                 next();
@@ -78,7 +79,7 @@ module.exports = {
     },
     retrieve:(req,res,next)=>{
         let startupId = req.params.id;
-        Startup.findById(startupId).populate("owner").populate("comments.$*.author")
+        Startup.findById(startupId).populate("owner").populate({path:"comments.author",select:"name",model:"User"})
         .then(startup =>{
             res.locals.startup = startup;
             next();
@@ -97,7 +98,7 @@ module.exports = {
         res.status(200).json(resObj);
     },
     index: (req,res,next)=>{
-        Startup.find({}).populate("owner","name").populate({path:"comments.startup"})
+        Startup.find({}).populate("owner","name").populate({path:"comments.author",select:"name",model:"User"})
         .then(startups => {
             if(startups){
                 res.locals.startups = startups;

@@ -62,7 +62,7 @@ module.exports = {
         let userId = req.params.id, userParams = getUserParams(req);
         User.findByIdAndUpdate(userId, {
             $set: userParams
-        })
+        },{new:true})
         .then(user => {
                 res.locals.user = user;
                 next();
@@ -86,7 +86,7 @@ module.exports = {
     },
     show:(req,res,next)=>{
         let userId = req.params.id;
-        User.findById(userId).populate("startups", "name shortDescription").populate("comments")
+        User.findById(userId).populate("startups", "name shortDescription").populate({path:"comments.startup",select:"name",model:"Startup"})
         .then(user =>{
             res.locals.user = user;
             next();
@@ -104,7 +104,7 @@ module.exports = {
             data : res.locals
         };
         if(req.user){
-            User.findById(req.user._id).populate("startups", "name shortDescription").populate("comments.$*.startup")
+            User.findById(req.user._id).populate("startups", "name shortDescription").populate({path:"comments.startup",select:"name",model:"Startup"})
             .then(user =>{
                 res.locals.user = user;
                 res.status(200).json(resObj);
