@@ -1,7 +1,8 @@
 const router = require("express").Router();
 const usersController = require("../controllers/usersController");
 const multer = require("multer");
-let upload = multer({ dest: 'uploads/' });
+let storage = multer.memoryStorage();
+let upload = multer({ storage: storage });
 let imageUps = upload.single('profileImage');
 
 router.post("/login", usersController.authenticate, usersController.respondJSON);
