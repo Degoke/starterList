@@ -12,8 +12,7 @@ startupSchema = new Schema({
     },
     owner: {
         type: Schema.Types.ObjectId,
-        ref: "User",
-        autopopulate: true
+        ref: "User"
     },
     ratings: {
         type: Number,
@@ -28,8 +27,7 @@ startupSchema = new Schema({
     comments: [{
         author: {
             type: Schema.Types.ObjectId,
-            ref: "User",
-            autopopulate: true
+            ref: "User"
         },
         comment: String
     }],

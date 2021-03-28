@@ -13,8 +13,7 @@ const userSchema = new Schema({
     },
     startups: [{
         type: Schema.Types.ObjectId,
-        ref: "Startup",
-        autopopulate: true
+        ref: "Startup"
     }],
     phone: String,
     profileImage: String,
@@ -24,8 +23,7 @@ const userSchema = new Schema({
     comments: [{
         startup: {
             type: Schema.Types.ObjectId,
-            ref: "Startup",
-            autopopulate: true
+            ref: "Startup"
         },
         comment: String
     }]
