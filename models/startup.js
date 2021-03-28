@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
+const User = require("./user");
 
 startupSchema = new Schema({
     name: {
@@ -44,5 +45,22 @@ startupSchema = new Schema({
 
 startupSchema.plugin(require("mongoose-autopopulate"));
 
+startupSchema.post("findByIdAndUpdate",function(next){
+    let startup = this;
+    if(startup.comments.length > 0){
+        startup.comments.forEach(comment => {
+            User.findByIdAndUpdate(comment.author,{$addToSet:comment})
+            .then(user=>{
+                next();
+            })
+            .catch(error=>{
+                console.log(`Error in updating user comments: ${error.message}`);
+                next(error);
+            });
+        });
+    } else {
+        next();
+    }
+});
 
 module.exports = mongoose.model("Startup",startupSchema);
