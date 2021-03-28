@@ -4,7 +4,7 @@ function getStartupParams(obj){
     return {
         name: obj.name,
         shortDescription: obj.shortDescription,
-        owner: obj.user,
+        owner: obj.owner,
         ratings: obj.ratings,
         industry: obj.industry,
         location: obj.location,
@@ -101,7 +101,7 @@ module.exports = {
     comment: (req,res,next)=>{
         let startupId = req.params.id;
         let comment = {
-            author: req.user,
+            author: req.body.owner,
             comment: req.body.comment
         };
         Startup.findByIdAndUpdate(startupId, {
