@@ -20,7 +20,7 @@ module.exports = {
         let newUser = new User(getUserParams(req.body));
         User.register(newUser,req.body.password, (error, user)=>{
             if(user){
-                res.locals.user = user;
+                res.locals.user = user.select("-salt -hash");
                 next();
             } else {
                 console.log(`Failed to create user account because: ${error.message}`)
@@ -57,7 +57,7 @@ module.exports = {
     },
     show:(req,res,next)=>{
         let userId = req.params.id;
-        User.findById(userId)
+        User.findById(userId).populate("startups", "name").populate("comments.$*.startup")
         .then(user =>{
             res.locals.user = user;
             next();
