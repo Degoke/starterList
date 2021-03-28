@@ -78,7 +78,15 @@ module.exports = {
     authenticate: passport.authenticate("local",{session:false}),
     respondJSON: (req,res,next)=>{
         if(req.user){
-            res.locals.currentUser = req.user;
+            User.findById(req.user._id).populate("startups", "name shortDescription").populate("comments.$*.startup")
+            .then(user =>{
+                res.locals.user = user;
+                next();
+            })
+            .catch(error=>{
+                console.log(`Error retrieving user: ${error.message}`);
+                next(error);
+            })
         }
         resObj = {
                 status: 200,
