@@ -79,7 +79,7 @@ module.exports = {
     },
     retrieve:(req,res,next)=>{
         let startupId = req.params.id;
-        Startup.findById(startupId).populate("owner").populate({path:"comments.author",select:"name",model:"User"})
+        Startup.findById(startupId).populate("owner","name").populate({path:"comments.author",select:"name",model:"User"})
         .then(startup =>{
             res.locals.startup = startup;
             next();
