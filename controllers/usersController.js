@@ -20,8 +20,16 @@ module.exports = {
         let newUser = new User(getUserParams(req.body));
         User.register(newUser,req.body.password, (error, user)=>{
             if(user){
-                res.locals.user = user.select("-salt -hash");
-                next();
+                User.findById(user._id)
+                .then(user=>{
+                    res.locals.user = user
+                    next();
+                })
+                .catch(error=>{
+                    console.log(`Failed to create and retrieve user account because: ${error.message}`);
+                    next(error);
+                })
+                
             } else {
                 console.log(`Failed to create user account because: ${error.message}`)
                 next(new Error(`Failed to create user account because: ${error.message}`));
