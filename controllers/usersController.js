@@ -81,7 +81,6 @@ module.exports = {
             User.findById(req.user._id).populate("startups", "name shortDescription").populate("comments.$*.startup")
             .then(user =>{
                 res.locals.user = user;
-                next();
             })
             .catch(error=>{
                 console.log(`Error retrieving user: ${error.message}`);
