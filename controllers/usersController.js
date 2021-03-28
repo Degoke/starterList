@@ -6,11 +6,12 @@ function getUserParams(obj){
     if(obj.file){
         cloudinary.uploader.upload(obj.file)
         .then(image=>{
+            let url = image.url;
             return {
                 name: obj.body.name,
                 email: obj.body.email,
                 phone: obj.body.phone,
-                profileImage: image.url,
+                profileImage: url,
                 twitter: obj.body.twitter,
                 github: obj.body.github,
                 occupation: obj.body.occupation,
