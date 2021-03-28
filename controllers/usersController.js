@@ -77,22 +77,24 @@ module.exports = {
     },
     authenticate: passport.authenticate("local",{session:false}),
     respondJSON: (req,res,next)=>{
+        resObj = {
+            status: 200,
+            message: "success",
+            data : res.locals
+        };
         if(req.user){
             User.findById(req.user._id).populate("startups", "name shortDescription").populate("comments.$*.startup")
             .then(user =>{
                 res.locals.user = user;
+                res.status(200).json(resObj);
             })
             .catch(error=>{
                 console.log(`Error retrieving user: ${error.message}`);
                 next(error);
             })
-        }
-        resObj = {
-                status: 200,
-                message: "success",
-                data : res.locals
-            };
-        res.status(200).json(resObj);
+        } else res.status(200).json(resObj);
+        
+        
     },
     logout: (req,res,next) => {
         req.logout();
