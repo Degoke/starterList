@@ -1,44 +1,21 @@
 const User = require("../models/user");
 const passport = require("passport");
-const cloudinary = require('cloudinary').v2;
 
 function getUserParams(obj){
-    if(obj.file){
-        cloudinary.uploader.upload(obj.file.buffer.toString('base64'))
-        .then(image=>{
-            let url = image.url;
-            return {
-                name: obj.body.name,
-                email: obj.body.email,
-                phone: obj.body.phone,
-                profileImage: url,
-                twitter: obj.body.twitter,
-                github: obj.body.github,
-                occupation: obj.body.occupation,
-                startups: obj.body.startups,
-                comments: obj.body.comments};
-        })
-        .catch(error => {
-            console.log(`Error uploading profile image: ${error.message}`);
-            next(error);
-        })
-    } else {
-        return {
-            name: obj.body.name,
-            email: obj.body.email,
-            phone: obj.body.phone,
-            twitter: obj.body.twitter,
-            github: obj.body.github,
-            occupation: obj.body.occupation,
-            startups: obj.body.startups,
-            comments: obj.body.comments};
+    const params = {};
+    for(let key in obj){
+        if(key == "password") continue;
+        params[key] = obj["key"];
+        console.log(key);
+        console.log(obj["key"]);
     }
+    return params;
 };
     
 
 module.exports = {
     new:(req,res,next)=>{
-        let newUser = new User(getUserParams(req));
+        let newUser = new User(getUserParams(req.body));
         User.register(newUser,req.body.password, (error, user)=>{
             if(user){
                 User.findById(user._id)
@@ -59,7 +36,7 @@ module.exports = {
 
     },
     update:(req,res,next)=>{
-        let userId = req.params.id, userParams = getUserParams(req);
+        let userId = req.params.id, userParams = getUserParams(req.body);
         User.findByIdAndUpdate(userId, {
             $set: userParams
         },{new:true})

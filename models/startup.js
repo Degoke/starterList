@@ -41,6 +41,4 @@ startupSchema = new Schema({
 
 },{timestamps:true});
 
-startupSchema.plugin(require("mongoose-autopopulate"));
-
 module.exports = mongoose.model("Startup",startupSchema);

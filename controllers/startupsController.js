@@ -1,27 +1,14 @@
 const Startup = require("../models/startup");
-const { populate } = require("../models/user");
 const User = require("../models/user");
 
 function getStartupParams(obj){
-    return {
-        name: obj.name,
-        shortDescription: obj.shortDescription,
-        owner: obj.owner,
-        ratings: obj.ratings,
-        industry: obj.industry,
-        location: obj.location,
-        logo: obj.logo,
-        website: obj.website,
-        images: obj.images,
-        comments: obj.comments,
-        dateFounded: obj.dateFounded,
-        fundRaisingRound: obj.fundRaisingRound,
-        existingInvestors: obj.existingInvestors,
-        longDescription: obj.longDescription,
-        totalFunding: obj.totalFunding,
-        userMetrics: obj.userMetrics,
-        ownerImage: obj.ownerImage};
-
+    const params = {};
+    for(let key in obj){
+        params[key] = obj["key"];
+        console.log(key);
+        console.log(obj["key"]);
+    }
+    return params;
 };
 
 module.exports = {
@@ -53,6 +40,7 @@ module.exports = {
     update:(req,res,next)=>{
         let startupParams = getStartupParams(req.body),
         startupId = req.params.id;
+        console.log(startupParams);
         Startup.findByIdAndUpdate(startupId, {
             $set: startupParams
         },{new:true})
