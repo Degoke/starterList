@@ -8,13 +8,13 @@ import {
   HomeSideArea,
   HomeWrapper,
 } from './components'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { Loading, MyInput, MySelect } from '../../components/global'
-import { MyForm, SubmitButton } from '../../components/forms/components'
-//import ProfileCard from '../../components/forms/profile-card'
 import { StartupDataInterface } from '../../interfaces/global'
 import axios from 'axios'
 import { useLocation } from 'react-router-dom'
+import { MyForm, SubmitButton } from '../../components/forms/components'
+import { parseDate } from '../../utils/global/functions'
 
 const HomePage: React.FC = (): React.ReactElement => {
   const [data, setData] = useState<StartupDataInterface[]>()
@@ -37,14 +37,6 @@ const HomePage: React.FC = (): React.ReactElement => {
     getAllStartups()
   }, [location])
 
-  const profile = useRef<HTMLDivElement>(null)
-
-  const showProfile = () => {
-    if (profile.current) {
-      profile.current.style.display = 'flex'
-    }
-  }
-
   const handleSort = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSort(e.target.value)
   }
@@ -62,7 +54,7 @@ const HomePage: React.FC = (): React.ReactElement => {
           ) : (
             <>
               <DisplaySet>
-                <h3>Top Rated Startups</h3>
+                <h2>Top Rated Startups</h2>
                 <CardSection>
                   {data
                     .sort((a: StartupDataInterface, b: StartupDataInterface) =>
@@ -70,37 +62,44 @@ const HomePage: React.FC = (): React.ReactElement => {
                     )
                     .slice(0, 3)
                     .map((d: StartupDataInterface, i: number) => (
-                      <StartupCard
-                        key={i}
-                        startup={d}
-                        showProfile={showProfile}
-                        id={d._id as string}
-                      />
+                      <StartupCard key={i} startup={d} id={d._id as string} />
                     ))}
                 </CardSection>
               </DisplaySet>
               {sort === 'date' ? (
-                Array.from(new Set(data.map((x) => x.createdAt))).map(
-                  (date, i) => {
+                Array.from(
+                  new Set(
+                    data.map((x) =>
+                      x.createdAt
+                        ? new Date(x.createdAt).toLocaleDateString()
+                        : ''
+                    )
+                  )
+                )
+                  .sort((a, b) => (a && b ? (b > a ? 1 : -1) : 1))
+                  .map((date, i) => {
                     return (
                       <DisplaySet key={i}>
-                        <h4>{date}</h4>
+                        <h2>{date ? parseDate(date) : ''}</h2>
                         <CardSection>
                           {data
-                            .filter((startup) => startup.createdAt === date)
+                            .filter(
+                              (startup) =>
+                                new Date(
+                                  startup.createdAt || Date.now()
+                                ).toLocaleDateString() === date
+                            )
                             .map((startup, i) => (
                               <StartupCard
                                 key={i}
                                 startup={startup}
-                                showProfile={showProfile}
                                 id={startup._id}
                               />
                             ))}
                         </CardSection>
                       </DisplaySet>
                     )
-                  }
-                )
+                  })
               ) : (
                 <DisplaySet>
                   <h2>By Rating</h2>
@@ -111,12 +110,7 @@ const HomePage: React.FC = (): React.ReactElement => {
                           b.ratings > a.ratings ? 1 : -1
                       )
                       .map((d: StartupDataInterface, i: number) => (
-                        <StartupCard
-                          key={i}
-                          startup={d}
-                          showProfile={showProfile}
-                          id={d._id as string}
-                        />
+                        <StartupCard key={i} startup={d} id={d._id as string} />
                       ))}
                   </CardSection>
                 </DisplaySet>

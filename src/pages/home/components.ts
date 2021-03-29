@@ -50,6 +50,9 @@ export const HomeSideArea = styled.aside`
 `
 export const DisplaySet = styled.div`
   margin-top: 3rem;
+  h2 {
+    margin-bottom: 1rem;
+  }
 `
 
 export const FilterDiv = styled.div`

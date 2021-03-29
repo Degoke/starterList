@@ -7,8 +7,10 @@ export type FundRaisingRoundsType =
   | 'none'
 
 export interface CommentInterface {
-  author?: string
-  startup?: string
+  author: {
+    id: string
+    name: string
+  }
   comment: string
 }
 
@@ -16,6 +18,11 @@ export interface UserStartups {
   _id: string
   name: string
   shortDescription?: string
+}
+
+export interface StartupsUser {
+  _id: string
+  name: string
 }
 
 export interface StartupDataInterface {
@@ -35,9 +42,9 @@ export interface StartupDataInterface {
   longDescription: string
   totalFunding: string
   userMetrics: string
-  owner: string
+  owner: StartupsUser
   ownerImage: string
-  createdAt?: Date
+  createdAt?: string
 }
 
 export interface UserInterface {

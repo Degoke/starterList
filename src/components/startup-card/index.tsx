@@ -14,11 +14,12 @@ import { MyIconButton } from '../global'
 import { useHistory } from 'react-router-dom'
 import { useState, useRef } from 'react'
 import axios from 'axios'
+import ProfileCard from '../forms/profile-card'
+import { UserInterface } from '../../interfaces/global'
 
 export interface StartupInterface {
   key: number
   startup: StartupDataInterface
-  showProfile: () => void
   id: string
 }
 
@@ -29,6 +30,8 @@ const StartupCard: React.FC<StartupInterface> = (
 
   const [votes, setVotes] = useState(props.startup.ratings)
 
+  const [data, setData] = useState<UserInterface>()
+
   const vote = useRef<HTMLButtonElement | null>(null)
 
   const showDetails = () => {
@@ -36,6 +39,7 @@ const StartupCard: React.FC<StartupInterface> = (
   }
 
   const upVote = async (): Promise<void> => {
+    setVotes((prevVotes) => prevVotes + 1)
     try {
       const response = await axios.post(
         `https://starter-list-backend.glitch.me/api/startups/${props.id}/upvote`
@@ -51,42 +55,67 @@ const StartupCard: React.FC<StartupInterface> = (
     }
   }
 
+  const profile = useRef<HTMLDivElement>(null)
+
+  const showProfile = () => {
+    if (profile.current) {
+      profile.current.style.display = 'flex'
+    }
+    const getCurrentUser = async (): Promise<void> => {
+      try {
+        const response = await axios.get(
+          `https://starter-list-backend.glitch.me/api/users/${props.startup.owner._id}`
+        )
+
+        if (response.data.status === 200) {
+          setData(response.data.data.user)
+        }
+      } catch (err) {
+        alert(`${err}error`)
+      }
+    }
+    getCurrentUser()
+  }
+
   return (
-    <CardWrapper>
-      <div>
-        <ImageWrapper src={props.startup.images} onClick={showDetails} />
-      </div>
-      <CardTopWrapper onClick={showDetails}>
+    <>
+      <CardWrapper>
         <div>
-          <div style={{ fontSize: '1.2rem' }}>{props.startup.name}</div>
-          <div style={{ fontSize: '0.6rem' }}>{props.startup.industry}</div>
+          <ImageWrapper src={props.startup.images} onClick={showDetails} />
         </div>
-      </CardTopWrapper>
-      <CardMiddleWrapper onClick={showDetails}>
-        {props.startup.shortDescription}
-      </CardMiddleWrapper>
-      <CardBottomWrapper>
-        <CardBottomGroup>
+        <CardTopWrapper onClick={showDetails}>
+          <div>
+            <div style={{ fontSize: '1.2rem' }}>{props.startup.name}</div>
+            <div style={{ fontSize: '0.6rem' }}>{props.startup.industry}</div>
+          </div>
+        </CardTopWrapper>
+        <CardMiddleWrapper onClick={showDetails}>
+          {props.startup.shortDescription}
+        </CardMiddleWrapper>
+        <CardBottomWrapper>
           <CardBottomGroup>
-            <MyIconButton>
-              <ModeCommentRoundedIcon onClick={showDetails} />
-              <div>{props.startup.comments?.length}</div>
-            </MyIconButton>
+            <CardBottomGroup>
+              <MyIconButton>
+                <ModeCommentRoundedIcon onClick={showDetails} />
+                <div>{props.startup.comments?.length}</div>
+              </MyIconButton>
+            </CardBottomGroup>
+            <CardBottomGroup>
+              <MyIconButton onClick={upVote} ref={vote}>
+                <ThumbUpRoundedIcon />
+                <div>{votes}</div>
+              </MyIconButton>
+            </CardBottomGroup>
           </CardBottomGroup>
-          <CardBottomGroup>
-            <MyIconButton onClick={upVote} ref={vote}>
-              <ThumbUpRoundedIcon />
-              <div>{votes}</div>
+          <div>
+            <MyIconButton onClick={showProfile}>
+              <AccountCircleRoundedIcon fontSize="large" />
             </MyIconButton>
-          </CardBottomGroup>
-        </CardBottomGroup>
-        <div>
-          <MyIconButton onClick={props.showProfile}>
-            <AccountCircleRoundedIcon fontSize="large" />
-          </MyIconButton>
-        </div>
-      </CardBottomWrapper>
-    </CardWrapper>
+          </div>
+        </CardBottomWrapper>
+      </CardWrapper>
+      <ProfileCard ref={profile} data={data} />
+    </>
   )
 }
 

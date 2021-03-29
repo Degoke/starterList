@@ -1,5 +1,10 @@
 import { MyForm, SubmitButton } from '../../components/forms/components'
-import { MyTextField, MyIconButton, MyFullImage } from '../../components/global'
+import {
+  MyTextField,
+  MyIconButton,
+  MyFullImage,
+  Loading,
+} from '../../components/global'
 import NavBar from '../../components/navbar'
 import {
   ColumnGroup,
@@ -16,9 +21,10 @@ import FacebookIcon from '@material-ui/icons/Facebook'
 import TwitterIcon from '@material-ui/icons/Twitter'
 import AccountCircleRounded from '@material-ui/icons/AccountCircleRounded'
 import { useParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-import { StartupDataInterface } from '../../interfaces/global'
+import { useEffect, useState, useRef } from 'react'
+import { CommentInterface, StartupDataInterface } from '../../interfaces/global'
 import axios from 'axios'
+import ThumbUpRoundedIcon from '@material-ui/icons/ThumbUpRounded'
 
 export interface ParamsInterface {
   id?: string
@@ -29,6 +35,14 @@ const DetailsPage: React.FC = (): React.ReactElement => {
 
   const [startup, setStartup] = useState<StartupDataInterface>()
 
+  const [votes, setVotes] = useState<number>(0)
+
+  const [comments, setComments] = useState<CommentInterface[]>()
+
+  const [data, setData] = useState({})
+
+  const vote = useRef<HTMLButtonElement | null>(null)
+
   useEffect(() => {
     const getStartup = async (): Promise<void> => {
       try {
@@ -36,6 +50,8 @@ const DetailsPage: React.FC = (): React.ReactElement => {
           `https://starter-list-backend.glitch.me/api/startups/${id}`
         )
         setStartup(response.data.data.startup)
+        setVotes(response.data.data.startup.ratings)
+        setComments(response.data.data.startup.comments)
       } catch (err) {
         alert('omo server is down o')
       }
@@ -43,11 +59,58 @@ const DetailsPage: React.FC = (): React.ReactElement => {
     getStartup()
   }, [id])
 
+  const upVote = async (): Promise<void> => {
+    setVotes((prevVotes) => (prevVotes !== 0 ? prevVotes + 1 : 1))
+    try {
+      const response = await axios.post(
+        `https://starter-list-backend.glitch.me/api/startups/${id}/upvote`
+      )
+      if (response.data.status === 200) {
+        setVotes((prevVotes) => (prevVotes !== 0 ? prevVotes + 1 : 1))
+        if (vote.current) {
+          vote.current.style.color = '#000000'
+        }
+      }
+    } catch (err) {
+      alert(`${err}voting`)
+    }
+  }
+
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    setData((prevData) => ({
+      ...prevData,
+      [e.target.name]: e.target.value,
+      owner: localStorage.getItem('user'),
+    }))
+  }
+
+  const addComment = async (e: React.FormEvent): Promise<void> => {
+    e.preventDefault()
+    setComments((prevComments) => [...prevComments, data as CommentInterface])
+    try {
+      const response = await axios.post(
+        `https://starter-list-backend.glitch.me/api/startups/${id}/comments`,
+        data
+      )
+      if (response.data.status === 200) {
+        alert('your comment has been noted')
+      }
+    } catch (err) {
+      alert(`${err}adding comment`)
+    }
+  }
+
   return (
     <>
       <NavBar />
-      {startup === undefined ? (
-        <h1>Loading</h1>
+      {!startup ? (
+        <Loading>
+          <h1>Loading</h1>
+        </Loading>
       ) : (
         <DetailsContainer>
           <DetailsWrapper>
@@ -60,7 +123,7 @@ const DetailsPage: React.FC = (): React.ReactElement => {
               <RowGroup>
                 <ColumnGroup>
                   <h3>Team</h3>
-                  <p>owner</p>
+                  <p>{startup.owner?.name}</p>
                 </ColumnGroup>
                 <ColumnGroup>
                   <h3>Location</h3>
@@ -105,39 +168,38 @@ const DetailsPage: React.FC = (): React.ReactElement => {
 
                 <p>Share</p>
               </MyIconButton>
+              <MyIconButton onClick={upVote} ref={vote}>
+                <ThumbUpRoundedIcon fontSize="large" />
+                <p>{votes}</p>
+              </MyIconButton>
             </div>
           </DetailsWrapper>
           <DiscussionsWrapper>
             <h1 id="discussion">Discussion</h1>
-            <MyForm>
+            <MyForm onSubmit={addComment}>
               <label htmlFor="comment">Add a Comment...</label>
 
-              <MyTextField rows={8} cols={50} />
+              <MyTextField
+                rows={8}
+                cols={50}
+                onChange={handleChange}
+                name="comment"
+              />
 
-              <SubmitButton value="Add" />
+              <SubmitButton value="Add" type="submit" />
             </MyForm>
-            <CommentBox>
-              <ColumnGroup>
-                <CloseRowGroup>
-                  <AccountCircleRounded /> <p className="commentname">name</p>
-                </CloseRowGroup>
+            {comments?.map((comment, i) => (
+              <CommentBox key={i}>
+                <ColumnGroup>
+                  <CloseRowGroup>
+                    <AccountCircleRounded />{' '}
+                    <p className="commentname">{comment.author?.name}</p>
+                  </CloseRowGroup>
 
-                <div>{startup.shortDescription}</div>
-                <p className="commentdate">date</p>
-              </ColumnGroup>
-            </CommentBox>
-            <CommentBox>
-              <div>{startup.shortDescription}</div>
-            </CommentBox>
-            <CommentBox>
-              <div>{startup.shortDescription}</div>
-            </CommentBox>
-            <CommentBox>
-              <div>{startup.shortDescription}</div>
-            </CommentBox>
-            <CommentBox>
-              <div>{startup.shortDescription}</div>
-            </CommentBox>
+                  <div>{comment.comment}</div>
+                </ColumnGroup>
+              </CommentBox>
+            ))}
           </DiscussionsWrapper>
         </DetailsContainer>
       )}

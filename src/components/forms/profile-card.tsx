@@ -2,7 +2,6 @@ import { ModalWrapper, ModalContainer, QuitButton } from './components'
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded'
 import { forwardRef, useRef } from 'react'
 import { useCombinedRefs } from '../../utils/global/functions'
-
 import { Loading } from '../global'
 import { UserInterface } from '../../interfaces/global'
 
@@ -40,7 +39,7 @@ const ProfileCard = forwardRef(
               <p>startups</p>
               {props.data.startups.map((startup) => startup.name)}
               <h1>Comments</h1>
-              {props.data.comments.map((comment) => comment)}
+              {props.data.comments.map((comment) => comment.comment)}
             </>
           )}
         </ModalWrapper>
