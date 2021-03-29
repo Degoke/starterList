@@ -119,16 +119,15 @@ const HomePage: React.FC = (): React.ReactElement => {
           )}
         </HomeDisplayArea>
         <HomeSideArea>
-          <h1>Sort</h1>
+          <h2>Sort</h2>
           <label>
             <MySelect name="sort" onChange={handleSort}>
               <option value="date">Date</option>
               <option value="rating">Rating</option>
             </MySelect>
           </label>
-          <h1>Filter</h1>
 
-          <h1>Subscribe to our Newsletter</h1>
+          <h2>Subscribe to our Newsletter</h2>
           <MyForm>
             <label htmlFor="email">Email Address</label>
 

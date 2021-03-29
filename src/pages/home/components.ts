@@ -21,6 +21,11 @@ export const HomeWrapper = styled.div`
   display: grid;
   grid-template-columns: 3fr 1fr;
   grid-column-gap: 3rem;
+
+  h2 {
+    margin-bottom: 1rem;
+  }
+
   @media all and (max-width: 800px) {
     margin-left: 1rem;
     grid-column-gap: 2rem;
