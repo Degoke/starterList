@@ -23,17 +23,18 @@ const HomePage: React.FC = (): React.ReactElement => {
 
   const location = useLocation()
 
-  useEffect(() => {
-    const getAllStartups = async (): Promise<void> => {
-      try {
-        const response = await axios.get(
-          'https://starter-list-backend.glitch.me/api/startups/'
-        )
-        setData(response.data.data.startups)
-      } catch (err) {
-        alert(`omo server is down o`)
-      }
+  const getAllStartups = async (): Promise<void> => {
+    try {
+      const response = await axios.get(
+        'https://starter-list-backend.glitch.me/api/startups/'
+      )
+      setData(response.data.data.startups)
+    } catch (err) {
+      alert(`omo server is down o`)
     }
+  }
+
+  useEffect(() => {
     getAllStartups()
   }, [location])
 
@@ -41,16 +42,23 @@ const HomePage: React.FC = (): React.ReactElement => {
     setSort(e.target.value)
   }
 
+  const search = (e) => {
+    if (e.target.value === '') {
+      getAllStartups()
+      return
+    }
+    const searched = data.filter((d) => d.name == e.target.value)
+    setData(searched)
+  }
+
   return (
     <div>
-      <NavBar />
+      <NavBar search={search} />
       <HomeWrapper>
         <HomeDisplayArea>
           <h1>Find the latest startups...</h1>
           {!data ? (
-            <Loading>
-              <h1>Loading... Bear with us Network no good</h1>
-            </Loading>
+            <Loading />
           ) : (
             <>
               <DisplaySet>
@@ -127,13 +135,13 @@ const HomePage: React.FC = (): React.ReactElement => {
             </MySelect>
           </label>
 
-          <h2>Subscribe to our Newsletter</h2>
+          <h2 className="sub">Subscribe to our Newsletter</h2>
           <MyForm>
-            <label htmlFor="email">Email Address</label>
+            <label htmlFor="subscribe">Email Address</label>
 
             <MyInput type="email" name="subscribe" />
 
-            <SubmitButton value="Subscribe" />
+            <SubmitButton type="submit" value="Subscribe" disabled />
           </MyForm>
         </HomeSideArea>
       </HomeWrapper>

@@ -62,4 +62,5 @@ export const NavMenu = styled(RightNavWrapper)`
   width: 100%;
   z-index: 1000;
   display: none;
+  padding: 0.5rem;
 `

@@ -17,14 +17,13 @@ import {
   CloseRowGroup,
 } from './components'
 import LanguageIcon from '@material-ui/icons/Language'
-import FacebookIcon from '@material-ui/icons/Facebook'
-import TwitterIcon from '@material-ui/icons/Twitter'
 import AccountCircleRounded from '@material-ui/icons/AccountCircleRounded'
 import { useParams } from 'react-router-dom'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useContext } from 'react'
 import { CommentInterface, StartupDataInterface } from '../../interfaces/global'
 import axios from 'axios'
 import ThumbUpRoundedIcon from '@material-ui/icons/ThumbUpRounded'
+import { MainContext } from '../../utils/global/context'
 
 export interface ParamsInterface {
   id?: string
@@ -43,6 +42,10 @@ const DetailsPage: React.FC = (): React.ReactElement => {
 
   const vote = useRef<HTMLButtonElement | null>(null)
 
+  const { currentUser } = useContext(MainContext)
+
+  const [clicked, setClicked] = useState(false)
+
   useEffect(() => {
     const getStartup = async (): Promise<void> => {
       try {
@@ -60,17 +63,19 @@ const DetailsPage: React.FC = (): React.ReactElement => {
   }, [id])
 
   const upVote = async (): Promise<void> => {
+    if (currentUser === 'none') {
+      alert('Sign in or sign up to vote')
+      return
+    }
+    setClicked(true)
     setVotes((prevVotes) => (prevVotes !== 0 ? prevVotes + 1 : 1))
+    if (vote.current) {
+      vote.current.style.color = '#FF0000'
+    }
     try {
-      const response = await axios.post(
+      await axios.post(
         `https://starter-list-backend.glitch.me/api/startups/${id}/upvote`
       )
-      if (response.data.status === 200) {
-        setVotes((prevVotes) => (prevVotes !== 0 ? prevVotes + 1 : 1))
-        if (vote.current) {
-          vote.current.style.color = '#000000'
-        }
-      }
     } catch (err) {
       alert(`${err}voting`)
     }
@@ -108,9 +113,7 @@ const DetailsPage: React.FC = (): React.ReactElement => {
     <>
       <NavBar />
       {!startup ? (
-        <Loading>
-          <h1>Loading</h1>
-        </Loading>
+        <Loading />
       ) : (
         <DetailsContainer>
           <DetailsWrapper>
@@ -118,7 +121,9 @@ const DetailsPage: React.FC = (): React.ReactElement => {
             <h1>{startup.name}</h1>
             <p>{startup.shortDescription}</p>
             <MyFullImage src={startup.images} />
-            <p>{startup.longDescription}</p>
+            <div className="long">
+              <p>{startup.longDescription.toString()}</p>
+            </div>
             <DetailsBox>
               <RowGroup>
                 <ColumnGroup>
@@ -133,7 +138,7 @@ const DetailsPage: React.FC = (): React.ReactElement => {
               <RowGroup>
                 <ColumnGroup>
                   <h3>Founded</h3>
-                  <p>{startup.dateFounded}</p>
+                  <p>{new Date(startup.dateFounded).toLocaleDateString()}</p>
                 </ColumnGroup>
                 <ColumnGroup>
                   <h3>Existing Investors</h3>
@@ -153,22 +158,14 @@ const DetailsPage: React.FC = (): React.ReactElement => {
             </DetailsBox>
 
             <div>
-              <MyIconButton>
-                <LanguageIcon fontSize="large" />
+              <a href={startup.website}>
+                <MyIconButton>
+                  <LanguageIcon fontSize="large" />
 
-                <p>Visit Site</p>
-              </MyIconButton>
-              <MyIconButton>
-                <FacebookIcon fontSize="large" />
-
-                <p>Share</p>
-              </MyIconButton>
-              <MyIconButton>
-                <TwitterIcon fontSize="large" />
-
-                <p>Share</p>
-              </MyIconButton>
-              <MyIconButton onClick={upVote} ref={vote}>
+                  <p>Visit Site</p>
+                </MyIconButton>
+              </a>
+              <MyIconButton onClick={upVote} ref={vote} disabled={clicked}>
                 <ThumbUpRoundedIcon fontSize="large" />
                 <p>{votes}</p>
               </MyIconButton>
@@ -193,7 +190,9 @@ const DetailsPage: React.FC = (): React.ReactElement => {
                 <ColumnGroup>
                   <CloseRowGroup>
                     <AccountCircleRounded />{' '}
-                    <p className="commentname">{comment.author?.name}</p>
+                    <p className="commentname">
+                      {comment.author?.name || localStorage.getItem('name')}
+                    </p>
                   </CloseRowGroup>
 
                   <div>{comment.comment}</div>

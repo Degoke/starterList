@@ -76,20 +76,41 @@ const AddStartup = forwardRef(
           ) : (
             <MyForm onSubmit={addStartup}>
               <label htmlFor="name">Name of Startup</label>
-              <MyInput type="text" name="name" onChange={handleChange} />
+              <MyInput
+                type="text"
+                name="name"
+                onChange={handleChange}
+                required
+              />
               <label htmlFor="industry">Industry</label>
-              <MyInput type="text" name="industry" onChange={handleChange} />
+              <MyInput
+                type="text"
+                name="industry"
+                onChange={handleChange}
+                required
+              />
               <label htmlFor="website">Website</label>
-              <MyInput type="url" name="website" onChange={handleChange} />
+              <MyInput
+                type="url"
+                name="website"
+                onChange={handleChange}
+                required
+              />
               <label htmlFor="shortDescription">Slogan</label>
               <MyInput
                 type="text"
                 name="shortDescription"
                 onChange={handleChange}
+                required
               />
 
               <label htmlFor="location">Location</label>
-              <MyInput type="text" name="location" onChange={handleChange} />
+              <MyInput
+                type="text"
+                name="location"
+                onChange={handleChange}
+                required
+              />
               <label htmlFor="logo">Logo</label>
               <MyInput
                 type="file"
@@ -106,9 +127,17 @@ const AddStartup = forwardRef(
                 onChange={handleChange}
               />
               <label htmlFor="dateFounded">Founding Date</label>
-              <MyInput type="date" name="dateFounded" onChange={handleChange} />
+              <MyInput
+                type="date"
+                name="dateFounded"
+                onChange={handleChange}
+                required
+              />
               <label htmlFor="fundRaisingRound">FundRaising Round</label>
-              <MySelect name="fundRaisingRound">
+              <MySelect name="fundRaisingRound" required>
+                <option value="pre-seed" selected>
+                  Pre-Seed
+                </option>
                 <option value="pre-seed">Pre-Seed</option>
                 <option value="seed">Seed</option>
                 <option value="series-a">Series A</option>
@@ -120,19 +149,31 @@ const AddStartup = forwardRef(
                 type="text"
                 name="existingInvestors"
                 onChange={handleChange}
+                required
               />
               <label htmlFor="totalFunding">Total Funding Amount Raised</label>
               <MyInput
                 type="text"
                 name="totalFunding"
                 onChange={handleChange}
+                required
               />
               <label htmlFor="userMetrics">User Metrics</label>
-              <MyInput type="text" name="userMetrics" onChange={handleChange} />
+              <MyInput
+                type="text"
+                name="userMetrics"
+                onChange={handleChange}
+                required
+              />
               <label htmlFor="longDescription">
                 Tell us About Your Startup
               </label>
-              <MyTextField name="longDescription" onChange={handleChange} />
+              <MyTextField
+                name="longDescription"
+                rows={8}
+                onChange={handleChange}
+                required
+              />
               <SubmitButton type="submit" value="Add" />
             </MyForm>
           )}

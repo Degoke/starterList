@@ -55,3 +55,16 @@ export const SubmitButton = styled.input`
 export const QuitButton = styled(MyIconButton)`
   float: right;
 `
+
+export const ProfileCardWrapper = styled.div`
+  width: 60%;
+  margin: auto;
+  text-align: center;
+  h2,
+  h3 {
+    margin-top: 2rem;
+  }
+  @media all and (max-width: 450px) {
+    width: 85%;
+  }
+`

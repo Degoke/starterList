@@ -75,9 +75,19 @@ const SignIn = forwardRef(
           <h1>Login</h1>
           <MyForm onSubmit={login}>
             <label htmlFor="email">Email Address...</label>
-            <MyInput type="email" name="email" onChange={handleChange} />
+            <MyInput
+              type="email"
+              name="email"
+              onChange={handleChange}
+              required
+            />
             <label htmlFor="password">Password...</label>
-            <MyInput type="password" name="password" onChange={handleChange} />
+            <MyInput
+              type="password"
+              name="password"
+              onChange={handleChange}
+              required
+            />
             <SubmitButton type="submit" value="login" />
           </MyForm>
         </ModalWrapper>

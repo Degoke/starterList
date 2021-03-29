@@ -17,9 +17,13 @@ import ProfileCard from '../forms/profile-card'
 import { UserInterface } from '../../interfaces/global'
 import axios from 'axios'
 
-export type NavLinksType = 'login' | 'register' | 'add'
+export interface NavPropsInterface {
+  search?: (e) => void
+}
 
-const NavBar: React.FC = (): React.ReactElement => {
+const NavBar: React.FC<NavPropsInterface> = ({
+  search,
+}): React.ReactElement => {
   const login = useRef<HTMLDivElement>(null)
 
   const register = useRef<HTMLDivElement>(null)
@@ -67,7 +71,7 @@ const NavBar: React.FC = (): React.ReactElement => {
   const toggleMenu = () => {
     setOpen(!open)
     if (menu.current) {
-      if (open) {
+      if (!open) {
         menu.current.style.display = 'flex'
       } else {
         menu.current.style.display = 'none'
@@ -108,6 +112,7 @@ const NavBar: React.FC = (): React.ReactElement => {
               <NavSearchBox
                 type="search"
                 placeholder="Find the next Unicorn..."
+                onChange={search}
               />
             </NavList>
             <NavList>

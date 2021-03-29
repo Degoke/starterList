@@ -10,7 +10,7 @@ export const myTheme: DefaultTheme = {
   font: {
     big: '15px',
     medium: '13px',
-    small: '11px',
+    small: '12px',
     family: '',
   },
 }
@@ -31,5 +31,9 @@ export const GlobalStyle = createGlobalStyle`
         @media all and (max-width: 650px) {
           font-size: ${(props) => props.theme.font.small};
         }
+    }
+    a{
+      text-decoration: none;
+      color: inherit;
     }
 `

@@ -49,6 +49,9 @@ export const HomeSideArea = styled.aside`
   position: fixed;
   right: 0;
   width: 20%;
+  .sub {
+    margin-top: 3rem;
+  }
   @media all and (max-width: 600px) {
     visibility: hidden;
   }

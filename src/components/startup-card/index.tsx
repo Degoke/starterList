@@ -12,10 +12,11 @@ import ThumbUpRoundedIcon from '@material-ui/icons/ThumbUpRounded'
 import AccountCircleRoundedIcon from '@material-ui/icons/AccountCircleRounded'
 import { MyIconButton } from '../global'
 import { useHistory } from 'react-router-dom'
-import { useState, useRef } from 'react'
+import { useState, useRef, useContext } from 'react'
 import axios from 'axios'
 import ProfileCard from '../forms/profile-card'
 import { UserInterface } from '../../interfaces/global'
+import { MainContext } from '../../utils/global/context'
 
 export interface StartupInterface {
   key: number
@@ -34,22 +35,32 @@ const StartupCard: React.FC<StartupInterface> = (
 
   const vote = useRef<HTMLButtonElement | null>(null)
 
+  const [clicked, setClicked] = useState(false)
+
+  const { currentUser } = useContext(MainContext)
+
   const showDetails = () => {
+    history.push(`/details/${props.id}`)
+  }
+
+  const showDiscussion = () => {
     history.push(`/details/${props.id}#discussion`)
   }
 
   const upVote = async (): Promise<void> => {
+    if (currentUser === 'none') {
+      alert('Sign in or sign up to vote')
+      return
+    }
+    setClicked(true)
     setVotes((prevVotes) => prevVotes + 1)
+    if (vote.current) {
+      vote.current.style.color = '#FF0000'
+    }
     try {
-      const response = await axios.post(
+      await axios.post(
         `https://starter-list-backend.glitch.me/api/startups/${props.id}/upvote`
       )
-      if (response.data.status === 200) {
-        setVotes((prevVotes) => prevVotes + 1)
-        if (vote.current) {
-          vote.current.style.color = '#000000'
-        }
-      }
     } catch (err) {
       alert(`${err}voting`)
     }
@@ -96,12 +107,12 @@ const StartupCard: React.FC<StartupInterface> = (
           <CardBottomGroup>
             <CardBottomGroup>
               <MyIconButton>
-                <ModeCommentRoundedIcon onClick={showDetails} />
+                <ModeCommentRoundedIcon onClick={showDiscussion} />
                 <div>{props.startup.comments?.length}</div>
               </MyIconButton>
             </CardBottomGroup>
             <CardBottomGroup>
-              <MyIconButton onClick={upVote} ref={vote}>
+              <MyIconButton onClick={upVote} ref={vote} disabled={clicked}>
                 <ThumbUpRoundedIcon />
                 <div>{votes}</div>
               </MyIconButton>

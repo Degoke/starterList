@@ -73,6 +73,21 @@ export const MyFullImage = styled.img`
   margin: 1rem auto;
 `
 export const Loading = styled.div`
-  width: 60%;
   margin: 20% auto;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: dashed 3px #d0ce03;
+  animation-name: loader-spin;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  @keyframes loader-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
 `

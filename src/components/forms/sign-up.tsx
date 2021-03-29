@@ -75,17 +75,42 @@ const SignUp = forwardRef(
           <h1>Login</h1>
           <MyForm onSubmit={addUser}>
             <label htmlFor="name">Full Name..</label>
-            <MyInput type="text" name="name" onChange={handleChange} />
+            <MyInput type="text" name="name" onChange={handleChange} required />
             <label htmlFor="email">Email Address...</label>
-            <MyInput type="email" name="email" onChange={handleChange} />
+            <MyInput
+              type="email"
+              name="email"
+              onChange={handleChange}
+              required
+            />
             <label htmlFor="phone">Phone Number</label>
-            <MyInput type="text" name="phone" onChange={handleChange} />
+            <MyInput
+              type="text"
+              name="phone"
+              onChange={handleChange}
+              required
+            />
             <label htmlFor="occupation">Occupation...</label>
-            <MyInput type="text" name="occupation" onChange={handleChange} />
+            <MyInput
+              type="text"
+              name="occupation"
+              onChange={handleChange}
+              required
+            />
             <label htmlFor="github">Github Link...</label>
-            <MyInput type="text" name="github" onChange={handleChange} />
+            <MyInput
+              type="text"
+              name="github"
+              onChange={handleChange}
+              required
+            />
             <label htmlFor="twitter">Twitter Link...</label>
-            <MyInput type="text" name="twitter" onChange={handleChange} />
+            <MyInput
+              type="text"
+              name="twitter"
+              onChange={handleChange}
+              required
+            />
             <label htmlFor="profileImage">Profile Image...</label>
             <MyInput
               type="file"
@@ -94,7 +119,12 @@ const SignUp = forwardRef(
               onChange={handleChange}
             />
             <label htmlFor="password">Password...</label>
-            <MyInput type="password" name="password" onChange={handleChange} />
+            <MyInput
+              type="password"
+              name="password"
+              onChange={handleChange}
+              required
+            />
             <SubmitButton type="submit" value="Register" />
           </MyForm>
         </ModalWrapper>

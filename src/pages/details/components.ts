@@ -4,6 +4,11 @@ export const DetailsWrapper = styled.section`
   width: 80%;
   margin: auto;
   text-align: center;
+  .long {
+    text-align: center;
+    text-overflow: ellipsis;
+    padding: 1rem;
+  }
 
   @media all and (max-width: 500px) {
     width: 90%;
