@@ -7,7 +7,10 @@ function getUserParams(obj){
         if(key == "password") continue;
         params[key] = obj.body[key];
     }
-    params[obj.file.fieldname] = obj.file.path;
+    if(obj.file){
+        params[obj.file.fieldname] = obj.file.path;
+    }
+    
     return params;
 };
     
@@ -15,7 +18,6 @@ function getUserParams(obj){
 module.exports = {
     new:(req,res,next)=>{
         let newUser = new User(getUserParams(req));
-        console.log(req.file);
         User.register(newUser,req.body.password, (error, user)=>{
             if(user){
                 User.findById(user._id)
