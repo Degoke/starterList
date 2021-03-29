@@ -7,7 +7,7 @@ import {
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded'
 import { forwardRef, useRef } from 'react'
 import { useCombinedRefs } from '../../utils/global/functions'
-import { Loading, MyButton } from '../global'
+import { Loading, MyButton, MyFullImage } from '../global'
 import { UserInterface } from '../../interfaces/global'
 import { CommentBox } from '../../pages/details/components'
 import { useHistory } from 'react-router-dom'
@@ -53,6 +53,11 @@ const ProfileCard = forwardRef(
             <ProfileCardWrapper>
               <h1>Profile</h1>
               <h2>{props.data.name}</h2>
+              <MyFullImage
+                height={50}
+                width={50}
+                src={props.data.profileImage}
+              />
               <p>{props.data.occupation}</p>
               <p>{props.data.phone}</p>
               <div>
