@@ -5,9 +5,9 @@ function getUserParams(obj){
     const params = {};
     for(let key in obj){
         if(key == "password") continue;
-        params[key] = obj["key"];
+        params[key] = obj[key];
         console.log(key);
-        console.log(obj["key"]);
+        console.log(obj[key]);
     }
     return params;
 };

@@ -4,9 +4,9 @@ const User = require("../models/user");
 function getStartupParams(obj){
     const params = {};
     for(let key in obj){
-        params[key] = obj["key"];
+        params[key] = obj[key];
         console.log(key);
-        console.log(obj["key"]);
+        console.log(obj[key]);
     }
     return params;
 };
@@ -40,7 +40,6 @@ module.exports = {
     update:(req,res,next)=>{
         let startupParams = getStartupParams(req.body),
         startupId = req.params.id;
-        console.log(startupParams);
         Startup.findByIdAndUpdate(startupId, {
             $set: startupParams
         },{new:true})
