@@ -3,17 +3,24 @@ const User = require("../models/user");
 
 function getStartupParams(obj){
     const params = {};
-    for(let key in obj){
-        params[key] = obj[key];
-        console.log(key);
-        console.log(obj[key]);
+    for(let key in obj.body){
+        params[key] = obj.body[key];
+    }
+    const files = obj.files;
+    for(let obj in files){
+        if(obj == "logo" || obj == "ownerImage"){
+            params[obj] = files[obj][0].path;
+        }
+        if(obj == "images"){
+            params[obj] = files[obj].map(file=>file.path);
+        }
     }
     return params;
 };
 
 module.exports = {
     new:(req,res,next)=>{
-        let startupParams = getStartupParams(req.body);
+        let startupParams = getStartupParams(req);
         Startup.create(startupParams)
         .then(startup => {
             if(startup.owner && startup.owner != null){
@@ -38,7 +45,7 @@ module.exports = {
 
     },
     update:(req,res,next)=>{
-        let startupParams = getStartupParams(req.body),
+        let startupParams = getStartupParams(req),
         startupId = req.params.id;
         Startup.findByIdAndUpdate(startupId, {
             $set: startupParams

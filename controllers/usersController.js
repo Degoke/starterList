@@ -3,19 +3,19 @@ const passport = require("passport");
 
 function getUserParams(obj){
     const params = {};
-    for(let key in obj){
+    for(let key in obj.body){
         if(key == "password") continue;
-        params[key] = obj[key];
-        console.log(key);
-        console.log(obj[key]);
+        params[key] = obj.body[key];
     }
+    params[obj.file.fieldname] = obj.file.path;
     return params;
 };
     
 
 module.exports = {
     new:(req,res,next)=>{
-        let newUser = new User(getUserParams(req.body));
+        let newUser = new User(getUserParams(req));
+        console.log(req.file);
         User.register(newUser,req.body.password, (error, user)=>{
             if(user){
                 User.findById(user._id)
@@ -36,7 +36,7 @@ module.exports = {
 
     },
     update:(req,res,next)=>{
-        let userId = req.params.id, userParams = getUserParams(req.body);
+        let userId = req.params.id, userParams = getUserParams(req);
         User.findByIdAndUpdate(userId, {
             $set: userParams
         },{new:true})

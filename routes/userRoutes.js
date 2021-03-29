@@ -1,8 +1,15 @@
 const router = require("express").Router();
 const usersController = require("../controllers/usersController");
-const formData = require("multer"),
-storage = formData.memoryStorage(),
-uploads = formData({storage:storage});
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const formData = require("multer");
+const storage = new CloudinaryStorage({
+    cloudinary:cloudinary,
+    params:{
+        folder:"starterList"
+    }
+});
+const uploads = formData({storage:storage});
 
 router.post("/login", uploads.none(), usersController.authenticate, usersController.respondJSON);
 router.get("/logout", usersController.logout, usersController.respondJSON);

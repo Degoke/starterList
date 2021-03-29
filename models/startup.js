@@ -23,7 +23,7 @@ startupSchema = new Schema({
     location: String,
     logo: String,
     website: String,
-    images: String,
+    images: [String],
     comments: [{
         author: {
             type: Schema.Types.ObjectId,
