@@ -72,7 +72,7 @@ const SignUp = forwardRef(
           <QuitButton onClick={closeLogin}>
             <CloseRoundedIcon />
           </QuitButton>
-          <h1>Login</h1>
+          <h1>Register</h1>
           <MyForm onSubmit={addUser}>
             <label htmlFor="name">Full Name..</label>
             <MyInput type="text" name="name" onChange={handleChange} required />

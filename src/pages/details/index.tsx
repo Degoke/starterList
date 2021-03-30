@@ -95,6 +95,10 @@ const DetailsPage: React.FC = (): React.ReactElement => {
 
   const addComment = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault()
+    if (currentUser === 'none') {
+      alert('login or sign up to comment')
+      return
+    }
     setComments((prevComments) => [...prevComments, data as CommentInterface])
     try {
       const response = await axios.post(
@@ -120,7 +124,7 @@ const DetailsPage: React.FC = (): React.ReactElement => {
             <img src={startup.logo} />
             <h1>{startup.name}</h1>
             <p>{startup.shortDescription}</p>
-            <MyFullImage src={startup.images} />
+            <MyFullImage width={200} height={200} src={startup.images} />
             <div className="long">
               <p>{startup.longDescription.toString()}</p>
             </div>
