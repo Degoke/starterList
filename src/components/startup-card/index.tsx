@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   CardWrapper,
   CardBottomWrapper,
@@ -12,7 +13,7 @@ import ThumbUpRoundedIcon from '@material-ui/icons/ThumbUpRounded'
 import AccountCircleRoundedIcon from '@material-ui/icons/AccountCircleRounded'
 import { MyIconButton } from '../global'
 import { useHistory } from 'react-router-dom'
-import { useState, useRef, useContext } from 'react'
+import { useState, useRef, useContext, useEffect } from 'react'
 import axios from 'axios'
 import ProfileCard from '../forms/profile-card'
 import { UserInterface } from '../../interfaces/global'
@@ -47,12 +48,23 @@ const StartupCard: React.FC<StartupInterface> = (
     history.push(`/details/${props.id}#discussion`)
   }
 
+  useEffect(() => {
+    const click = sessionStorage.getItem(`click${props.startup._id}`)
+    if (click) {
+      setClicked(true)
+      if (vote.current) {
+        vote.current.style.color = '#FF0000'
+      }
+    }
+  }, [])
+
   const upVote = async (): Promise<void> => {
     if (currentUser === 'none') {
       alert('Sign in or sign up to vote')
       return
     }
     setClicked(true)
+    sessionStorage.setItem(`click${props.startup._id}`, 'clicked')
     setVotes((prevVotes) => prevVotes + 1)
     if (vote.current) {
       vote.current.style.color = '#FF0000'

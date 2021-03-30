@@ -3,6 +3,7 @@ import {
   ModalContainer,
   QuitButton,
   ProfileCardWrapper,
+  CardBox,
 } from './components'
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded'
 import { forwardRef, useRef } from 'react'
@@ -37,6 +38,7 @@ const ProfileCard = forwardRef(
 
     const logout = () => {
       localStorage.clear()
+      sessionStorage.clear()
       closeLogin()
       history.push('/')
     }
@@ -70,15 +72,22 @@ const ProfileCard = forwardRef(
               </div>
 
               <h3>startups</h3>
-              {props.data.startups.map((startup, i) => (
-                <CommentBox key={i}>
-                  <Link to={`/details/${startup._id}`}>{startup.name}</Link>
-                </CommentBox>
-              ))}
+              <CardBox>
+                {props.data.startups.map((startup, i) => (
+                  <CommentBox className="profile" key={i}>
+                    <Link to={`/details/${startup._id}`}>{startup.name}</Link>
+                  </CommentBox>
+                ))}
+              </CardBox>
+
               <h3>Comments</h3>
-              {props.data.comments.map((comment, i) => (
-                <CommentBox key={i}>{comment.comment}</CommentBox>
-              ))}
+              <CardBox>
+                {props.data.comments.map((comment, i) => (
+                  <CommentBox className="profile" key={i}>
+                    {comment.comment}
+                  </CommentBox>
+                ))}
+              </CardBox>
               <MyButton onClick={logout}>Logout</MyButton>
             </ProfileCardWrapper>
           )}

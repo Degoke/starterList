@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { MyForm, SubmitButton } from '../../components/forms/components'
 import {
   MyTextField,
@@ -62,12 +63,23 @@ const DetailsPage: React.FC = (): React.ReactElement => {
     getStartup()
   }, [id])
 
+  useEffect(() => {
+    const click = sessionStorage.getItem(`click${id}`)
+    if (click) {
+      setClicked(true)
+      if (vote.current) {
+        vote.current.style.color = '#FF0000'
+      }
+    }
+  }, [])
+
   const upVote = async (): Promise<void> => {
     if (currentUser === 'none') {
       alert('Sign in or sign up to vote')
       return
     }
     setClicked(true)
+    sessionStorage.setItem(`click${id}`, 'clicked')
     setVotes((prevVotes) => (prevVotes !== 0 ? prevVotes + 1 : 1))
     if (vote.current) {
       vote.current.style.color = '#FF0000'
@@ -162,7 +174,7 @@ const DetailsPage: React.FC = (): React.ReactElement => {
             </DetailsBox>
 
             <div>
-              <a href={startup.website}>
+              <a href={startup.website} target="_blank" rel="noreferrer">
                 <MyIconButton>
                   <LanguageIcon fontSize="large" />
 

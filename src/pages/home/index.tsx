@@ -47,7 +47,9 @@ const HomePage: React.FC = (): React.ReactElement => {
       getAllStartups()
       return
     }
-    const searched = data.filter((d) => d.name == e.target.value)
+    const searched = data.filter((d) =>
+      d.name.toLowerCase().includes(e.target.value.toLowerCase())
+    )
     setData(searched)
   }
 

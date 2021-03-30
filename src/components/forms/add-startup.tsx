@@ -6,7 +6,7 @@ import {
   QuitButton,
 } from './components'
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded'
-import { MyInput, MyTextField, MySelect, Loading } from '../global'
+import { MyInput, MyTextField, MySelect } from '../global'
 import React, { forwardRef, useRef, useState, useContext } from 'react'
 import { useCombinedRefs } from '../../utils/global/functions'
 import axios from 'axios'
@@ -70,9 +70,7 @@ const AddStartup = forwardRef(
           </QuitButton>
           <h1>Add a Startup</h1>
           {currentUser === 'none' ? (
-            <Loading>
-              <h2>Sign in or create an account to post a startup</h2>
-            </Loading>
+            <h2>Sign in or create an account to post a startup</h2>
           ) : (
             <MyForm onSubmit={addStartup}>
               <label htmlFor="name">Name of Startup</label>

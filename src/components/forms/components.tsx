@@ -68,3 +68,7 @@ export const ProfileCardWrapper = styled.div`
     width: 85%;
   }
 `
+export const CardBox = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+`

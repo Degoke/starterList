@@ -38,6 +38,9 @@ export const CommentBox = styled.div`
   border: 1px solid ${(props) => props.theme.color.secondary};
   padding: 1rem 0.5rem;
   margin: 1rem 0;
+  .profile {
+    padding: 0.5rem 0.2rem;
+  }
 `
 
 export const RowGroup = styled.div`
